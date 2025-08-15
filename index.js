@@ -64,3 +64,15 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+  document.getElementById('testimonialForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    alert("Thank you for your feedback!");
+    const modal = bootstrap.Modal.getInstance(document.getElementById('testimonialModal'));
+    modal.hide();
+    this.reset();
+  });
+
+
+
+  
+    
