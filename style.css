@@ -289,8 +289,7 @@ body.dark-mode .badge-custom {
   left: -28px;
   width: 16px;
   height: 16px;
-  border-radius: 50%;
-  background-color: #000;
+
 }
 
 /* ==========================
@@ -441,5 +440,6 @@ body.dark-mode .footer {
   opacity: 1;
   transform: translateY(0);
 }
+
 
 
