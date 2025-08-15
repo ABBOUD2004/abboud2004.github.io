@@ -5,10 +5,10 @@
 
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" />
-  
+
   <!-- Bootstrap Icons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
-  
+
   <!-- Custom Styles -->
   <link rel="stylesheet" href="style.css" />
 
@@ -22,7 +22,8 @@
 
 <body>
 
-  <nav class="main-navbar py-3 d-flex justify-content-center">
+  <!-- Navbar للشاشات الكبيرة -->
+  <nav class="hidden lg:flex main-navbar py-3 justify-center fixed top-0 left-0 w-full z-50  ">
     <div class="nav-capsule px-4 py-2 d-flex gap-4 align-items-center animate">
       <a class="nav-link active" href="#home"><i class="bi bi-house-door-fill me-1"></i>Home</a>
       <a class="nav-link" href="#about-section"><i class="bi bi-person-fill me-1"></i>About</a>
@@ -34,16 +35,77 @@
     </div>
   </nav>
 
+  <!-- زر القائمة للموبايل -->
+  <div class="lg:hidden fixed top-4 right-4 z-50">
+    <button id="menuBtn"
+      class="bg-white border border-gray-200 shadow-lg hover:shadow-xl transition-all duration-200 p-2 rounded-lg">
+      <i class="bi bi-list text-2xl"></i>
+    </button>
+  </div>
 
-  
+  <!-- قائمة الموبايل -->
+  <div id="mobileMenu"
+    class="fixed top-0 right-0 h-full w-64 bg-white border-l border-gray-200 transform translate-x-full transition-transform duration-300 ease-in-out z-40">
+    <div class="flex flex-col h-full">
+      <div class="flex items-center justify-between p-6 border-b border-gray-100">
+        <span class="text-lg font-semibold">Menu</span>
+        <button id="closeMenu" class="text-gray-600 hover:text-gray-900">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+      <div class="flex-1 py-6 flex flex-col gap-4 px-6">
+        <a href="#home" class="nav-link"><i class="bi bi-house-door-fill me-1"></i> Home</a>
+        <a href="#about-section" class="nav-link"><i class="bi bi-person-fill me-1"></i> About</a>
+        <a href="#experience" class="nav-link"><i class="bi bi-clock-history me-1"></i> Experience</a>
+        <a href="#projects" class="nav-link"><i class="bi bi-briefcase-fill me-1"></i> Projects</a>
+        <a href="#skills" class="nav-link"><i class="bi bi-code-slash me-1"></i> Skills</a>
+        <a href="#testimonials" class="nav-link"><i class="bi bi-chat-left-quote-fill me-1"></i> Testimonials</a>
+        <a href="#contact" class="nav-link"><i class="bi bi-envelope-fill me-1"></i> Contact</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const menuBtn = document.getElementById('menuBtn');
+    const closeMenu = document.getElementById('closeMenu');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const menuIcon = menuBtn.querySelector('i');
+
+    // Toggle القائمة عند الضغط على الزر
+    menuBtn.addEventListener('click', () => {
+      const isHidden = mobileMenu.classList.contains('translate-x-full');
+      mobileMenu.classList.toggle('translate-x-full');
+      mobileMenu.classList.toggle('translate-x-0');
+      menuIcon.className = isHidden ? 'bi bi-x-lg text-2xl' : 'bi bi-list text-2xl';
+    });
+
+    // زر الإغلاق
+    closeMenu.addEventListener('click', () => {
+      mobileMenu.classList.add('translate-x-full');
+      mobileMenu.classList.remove('translate-x-0');
+      menuIcon.className = 'bi bi-list text-2xl';
+    });
+
+    // إغلاق القائمة عند الضغط على أي رابط
+    document.querySelectorAll('#mobileMenu a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.add('translate-x-full');
+        mobileMenu.classList.remove('translate-x-0');
+        menuIcon.className = 'bi bi-list text-2xl';
+      });
+    });
+  </script>
+
+
 
 
   <section class="hero d-flex align-items-center py-5" id="home">
     <div class="container d-flex flex-column flex-lg-row align-items-center justify-content-between animate">
 
-      <div class="hero-text text-center text-lg-start mb-5 mb-lg-0">
-        <span class="badge-custom mb-3"> Available for freelance work</span>
-        <h1 class="display-5 fw-bold">Hi, I'm Abdallah mohamed</h1>
+      <!-- النص -->
+      <div class="hero-text text-center text-md-start mb-5 mb-lg-0 col-12 col-lg-6">
+        <span class="badge-custom mb-3">Available for freelance work</span>
+        <h1 class="display-5 fw-bold">Hi, I'm Abdallah Mohamed</h1>
         <h4 class="mb-3">
           <span id="typed-text"></span>
         </h4>
@@ -52,20 +114,20 @@
           I create beautiful, functional, and user-centered digital experiences.<br>
           I bring ideas to life with clean code and thoughtful design.
         </p>
-        <div class="buttons mt-4 d-flex flex-wrap gap-3 justify-content-center justify-content-lg-start">
+
+        <!-- الأزرار -->
+        <div class="buttons mt-4 d-flex flex-wrap gap-3 justify-content-center justify-content-md-start">
           <a href="#projects" class="btn btn-dark d-flex align-items-center gap-2">
             <i class="bi bi-eye-fill"></i> View Projects
           </a>
-
-
           <a href="#" class="btn btn-outline-dark d-flex align-items-center gap-2" data-bs-toggle="modal"
             data-bs-target="#contactModal">
             <i class="bi bi-send-fill"></i> Let’s Work Together
           </a>
-
-
         </div>
-        <div class="social-icons mt-4 d-flex gap-3 justify-content-center justify-content-lg-start">
+
+        <!-- أيقونات التواصل -->
+        <div class="social-icons mt-4 d-flex gap-3 justify-content-center justify-content-md-start">
           <a href="https://www.linkedin.com/in/abdallah-mohamed-9487861a1/"><i
               class="bi bi-linkedin fs-4 text-dark"></i></a>
           <a href="https://github.com/ABBOUD2004"><i class="bi bi-github fs-4 text-dark"></i></a>
@@ -73,37 +135,46 @@
           <a href="https://www.instagram.com/abdallah.elsayed.1612/"><i class="bi bi-instagram fs-4 text-dark"></i></a>
         </div>
       </div>
-      <div class="hero-image text-center animate">
+
+      <!-- الصورة -->
+      <div class="hero-image text-center col-12 col-lg-5">
         <img src="./Screenshot 2024-07-11 043546.png" class="rounded-4 img-fluid shadow" alt="Profile Image">
       </div>
     </div>
-  </section>
+  </section >
+
   <!-- Contact Modal -->
   <div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered modal-sm modal-md modal-lg">
       <div class="modal-content">
         <form method="POST" action="contact.php">
-          <div class="modal-header">
-            <h5 class="modal-title" id="contactModalLabel"><i class="bi bi-envelope-fill me-2"></i> Let's Work Together
+          <div class="modal-header flex-wrap">
+            <h5 class="modal-title d-flex align-items-center" id="contactModalLabel">
+              <i class="bi bi-envelope-fill me-2"></i> Let's Work Together
             </h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
+
           <div class="modal-body">
             <p class="text-muted mb-3">Tell me about your project and I’ll get back to you as soon as possible.</p>
+
             <div class="mb-3">
               <label for="name" class="form-label">Name *</label>
-              <input type="text" name="name" class="form-control" placeholder="Your name" required>
+              <input type="text" name="name" id="name" class="form-control" placeholder="Your name" required>
             </div>
+
             <div class="mb-3">
               <label for="email" class="form-label">Email *</label>
-              <input type="email" name="email" class="form-control" placeholder="your@email.com" required>
+              <input type="email" name="email" id="email" class="form-control" placeholder="your@email.com" required>
             </div>
+
             <div class="mb-3">
               <label for="message" class="form-label">Message *</label>
-              <textarea name="message" class="form-control" rows="3" placeholder="Tell me about your project..."
-                required></textarea>
+              <textarea name="message" id="message" class="form-control" rows="3"
+                placeholder="Tell me about your project..." required></textarea>
             </div>
           </div>
+
           <div class="modal-footer">
             <button type="submit" class="btn btn-dark w-100">
               <i class="bi bi-send me-1"></i> Send Message
@@ -113,6 +184,7 @@
       </div>
     </div>
   </div>
+
   <!DOCTYPE html>
   <html lang="en">
 
@@ -127,197 +199,254 @@
   </head>
 
   <body>
-   <section class="about-section py-5" id="about">
-  <div class="container">
-    <h2 class="text-center mb-3 animate__animated animate__fadeInDown">About Me</h2>
-    <p class="text-center text-muted animate__animated animate__fadeIn animate__delay-1s">
-      Passionate about creating innovative solutions through technology
-    </p>
 
-    <div class="row align-items-center mt-5 animate__animated animate__fadeInUp animate__delay-1s">
+    <!-- سكشن عني -->
+    <section class="about-section py-5" id="about">
+      <div class="container">
+        <h2 class="text-center mb-3 animate__animated animate__fadeInDown">About Me</h2>
+        <p class="text-center text-muted animate__animated animate__fadeIn animate__delay-1s">
+          Passionate about creating innovative solutions through technology
+        </p>
 
-      <!-- الصورة -->
-      <div class="col-12 col-md-5 text-center mb-4 mb-md-0">
-        <img src="./Screenshot 2024-07-11 043546.png" class="img-fluid rounded-4 shadow-lg profile-img"
-          alt="Profile Image">
+        <div class="row align-items-center mt-5 animate__animated animate__fadeInUp animate__delay-1s">
+
+          <!-- الصورة -->
+          <div class="col-12 col-md-5 text-center mb-4 mb-md-0">
+            <img src="./Screenshot 2024-07-11 043546.png" class="img-fluid rounded-4 shadow-lg profile-img"
+              alt="Profile Image">
+          </div>
+
+          <!-- المحتوى -->
+          <div class="col-12 col-md-7">
+            <div class="card p-4 shadow rounded-4 border-0">
+              <h3 class="mb-3">Hello There!</h3>
+              <p>
+                I'm a Full Stack Developer specialized in building modern, trend-aligned websites that reflect the
+                essence of today's digital design era. I help startups and small businesses who are often concerned
+                about cost, by delivering high-performing, scalable, and visually impactful solutions — without breaking
+                their budget. My mission is to make cutting-edge design and technology accessible to everyone, no matter
+                the size of their business.
+                Feel free to get in touch for value-driven results and a hands-on experience.
+              </p>
+
+              <!-- معلومات شخصية -->
+              <div class="row g-3 mt-4">
+                <div class="col-sm-6">
+                  <div class="info-box d-flex align-items-start gap-3 shadow-sm p-2 rounded-3">
+                    <i class="fas fa-user icon-box fs-5 mt-1 text-dark"></i>
+                    <div>
+                      <h6 class="mb-1">Name</h6>
+                      <p class="mb-0">Abdallah Elsayed</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-sm-6">
+                  <div class="info-box d-flex align-items-start gap-3 shadow-sm p-2 rounded-3">
+                    <i class="fas fa-map-marker-alt icon-box fs-5 mt-1 text-dark"></i>
+                    <div>
+                      <h6 class="mb-1">Location</h6>
+                      <p class="mb-0">Mansoura, Egypt</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-sm-6">
+                  <div class="info-box d-flex align-items-start gap-3 shadow-sm p-2 rounded-3">
+                    <i class="fas fa-graduation-cap icon-box fs-5 mt-1 text-dark"></i>
+                    <div>
+                      <h6 class="mb-1">Education</h6>
+                      <p class="mb-0">Computer Science,</p>
+                      <p> NMU</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-sm-6">
+                  <div class="info-box d-flex align-items-start gap-3 shadow-sm p-2 rounded-3">
+                    <i class="fas fa-envelope icon-box fs-5 mt-1 text-dark"></i>
+                    <div>
+                      <h6 class="mb-1">Email</h6>
+                      <p class="mb-0">abdallahelsayed192</p>
+                      <p>@gmail.com</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-sm-6">
+                  <div class="info-box d-flex align-items-start gap-3 shadow-sm p-2 rounded-3">
+                    <i class="fas fa-phone-alt icon-box fs-5 mt-1 text-dark"></i>
+                    <div>
+                      <h6 class="mb-1">Phone</h6>
+                      <p class="mb-0">+20 1156429081</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-sm-6">
+                  <div class="info-box d-flex align-items-start gap-3 shadow-sm p-2 rounded-3">
+                    <i class="fas fa-check-circle icon-box fs-5 mt-1 text-dark"></i>
+                    <div>
+                      <h6 class="mb-1">Status</h6>
+                      <p class="mb-0">Available for Work</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- الاهتمامات -->
+              <div class="mt-4">
+                <h5>Interests & Focus</h5>
+                <span class="badge bg-dark-subtle text-dark">Frontend Development</span>
+                <span class="badge bg-dark-subtle text-dark">React.js</span>
+                <span class="badge bg-dark-subtle text-dark">UI/UX Design</span>
+                <span class="badge bg-dark-subtle text-dark">Web Technologies</span>
+              </div>
+
+              <!-- أزرار الاتصال -->
+              <div class="mt-4 d-flex gap-2 flex-wrap">
+                <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#cvModal">
+                  <i class="fas fa-download"></i> Download My CV
+                </button>
+
+                <a href="#" class="btn btn-outline-dark d-flex align-items-center gap-2" data-bs-toggle="modal"
+                  data-bs-target="#contactModal">
+                  <i class="bi bi-send-fill"></i>Here Me Now
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
+    </section>
 
-      <!-- المحتوى -->
-      <div class="col-12 col-md-7">
-        <div class="card p-4 shadow rounded-4 border-0">
-          <h3 class="mb-3">Hello There!</h3>
-          <p>
-            I'm a Full Stack Developer specialized in building modern, trend-aligned websites that reflect the
-            essence of today's digital design era. I help startups and small businesses who are often concerned
-            about cost, by delivering high-performing, scalable, and visually impactful solutions — without breaking
-            their budget. My mission is to make cutting-edge design and technology accessible to everyone, no matter
-            the size of their business.
-            Feel free to get in touch for value-driven results and a hands-on experience.
-          </p>
+    <!-- Modal CV -->
+    <div class="modal fade" id="cvModal" tabindex="-1" aria-labelledby="cvModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content p-4">
+          <h5 class="mb-3">Download My CV</h5>
+          <p class="text-muted">Click below to download my latest CV.</p>
+          <a href="cv.pdf" class="btn btn-dark w-100" download><i class="fas fa-download me-2"></i>Download</a>
+        </div>
+      </div>
+    </div>
 
-          <!-- معلومات شخصية -->
-          <div class="row g-3 mt-4">
-            <div class="col-sm-6">
-              <div class="info-box d-flex align-items-start gap-3 shadow-sm p-2 rounded-3">
-                <i class="fas fa-user icon-box fs-5 mt-1 text-dark"></i>
-                <div>
-                  <h6 class="mb-1">Name</h6>
-                  <p class="mb-0">Abdallah Elsayed</p>
-                </div>
+    <!-- Contact Modal -->
+    <div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <form method="POST" action="contact.php">
+            <div class="modal-header">
+              <h5 class="modal-title" id="contactModalLabel"><i class="bi bi-envelope-fill me-2"></i> Let's Work
+                Together</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <p class="text-muted mb-3">Tell me about your project and I’ll get back to you as soon as possible.</p>
+              <div class="mb-3">
+                <label for="name" class="form-label">Name *</label>
+                <input type="text" name="name" class="form-control" placeholder="Your name" required>
+              </div>
+              <div class="mb-3">
+                <label for="email" class="form-label">Email *</label>
+                <input type="email" name="email" class="form-control" placeholder="your@email.com" required>
+              </div>
+              <div class="mb-3">
+                <label for="message" class="form-label">Message *</label>
+                <textarea name="message" class="form-control" rows="3" placeholder="Tell me about your project..."
+                  required></textarea>
               </div>
             </div>
-
-            <div class="col-sm-6">
-              <div class="info-box d-flex align-items-start gap-3 shadow-sm p-2 rounded-3">
-                <i class="fas fa-map-marker-alt icon-box fs-5 mt-1 text-dark"></i>
-                <div>
-                  <h6 class="mb-1">Location</h6>
-                  <p class="mb-0">Mansoura, Egypt</p>
-                </div>
-              </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-dark w-100">
+                <i class="bi bi-send me-1"></i> Send Message
+              </button>
             </div>
+          </form>
+        </div>
+      </div>
+    </div>
 
-            <div class="col-sm-6">
-              <div class="info-box d-flex align-items-start gap-3 shadow-sm p-2 rounded-3">
-                <i class="fas fa-graduation-cap icon-box fs-5 mt-1 text-dark"></i>
-                <div>
-                  <h6 class="mb-1">Education</h6>
-                  <p class="mb-0">Computer Science, NMU</p>
-                </div>
-              </div>
-            </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
 
-            <div class="col-sm-6">
-              <div class="info-box d-flex align-items-start gap-3 shadow-sm p-2 rounded-3">
-                <i class="fas fa-envelope icon-box fs-5 mt-1 text-dark"></i>
-                <div>
-                  <h6 class="mb-1">Email</h6>
-                  <p class="mb-0">abdallahelsayed192@gmail.com</p>
-                </div>
-              </div>
-            </div>
+  </html>
 
-            <div class="col-sm-6">
-              <div class="info-box d-flex align-items-start gap-3 shadow-sm p-2 rounded-3">
-                <i class="fas fa-phone-alt icon-box fs-5 mt-1 text-dark"></i>
-                <div>
-                  <h6 class="mb-1">Phone</h6>
-                  <p class="mb-0">+20 1156429081</p>
-                </div>
-              </div>
-            </div>
 
-            <div class="col-sm-6">
-              <div class="info-box d-flex align-items-start gap-3 shadow-sm p-2 rounded-3">
-                <i class="fas fa-check-circle icon-box fs-5 mt-1 text-dark"></i>
-                <div>
-                  <h6 class="mb-1">Status</h6>
-                  <p class="mb-0">Available for Work</p>
-                </div>
-              </div>
-            </div>
+  <!-- المودال -->
+  <div class="modal fade" id="cvModal" tabindex="-1" aria-labelledby="cvModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content shadow">
+        <div class="modal-header border-0">
+          <h5 class="modal-title" id="cvModalLabel">
+            <i class="fas fa-download me-2"></i>Download My CV
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p class="text-muted">Get my latest resume with all my experience and skills.</p>
+          <div class="bg-light p-3 rounded">
+            <h6>What's included:</h6>
+            <ul class="mb-0">
+              <li>Professional experience & skills</li>
+              <li>Education & certifications</li>
+              <li>Portfolio highlights</li>
+              <li>Contact information</li>
+            </ul>
           </div>
-
-          <!-- الاهتمامات -->
-          <div class="mt-4">
-            <h5>Interests & Focus</h5>
-            <span class="badge bg-dark-subtle text-dark">Frontend Development</span>
-            <span class="badge bg-dark-subtle text-dark">React.js</span>
-            <span class="badge bg-dark-subtle text-dark">UI/UX Design</span>
-            <span class="badge bg-dark-subtle text-dark">Web Technologies</span>
-          </div>
-
-          <!-- أزرار الاتصال -->
-          <div class="mt-4 d-flex gap-2 flex-wrap">
-            <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#cvModal">
-              <i class="fas fa-download"></i> Download My CV
-            </button>
-
-            <a href="#" class="btn btn-outline-dark d-flex align-items-center gap-2" data-bs-toggle="modal"
-              data-bs-target="#contactModal">
-              <i class="bi bi-send-fill"></i>Here Me Now
-            </a>
-          </div>
+        </div>
+        <div class="modal-footer border-0">
+          <a href="https://drive.google.com/file/d/1iYfZLGDgAwCYvapiesTbdtmPdykQjWPX/view?usp=drive_link"
+            class="btn btn-dark w-100" download>
+            <i class="fas fa-download me-2"></i>Download CV (PDF)
+          </a>
         </div>
       </div>
     </div>
   </div>
-</section>
 
 
-    <!-- المودال -->
-    <div class="modal fade" id="cvModal" tabindex="-1" aria-labelledby="cvModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content shadow">
-          <div class="modal-header border-0">
-            <h5 class="modal-title" id="cvModalLabel">
-              <i class="fas fa-download me-2"></i>Download My CV
-            </h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <p class="text-muted">Get my latest resume with all my experience and skills.</p>
-            <div class="bg-light p-3 rounded">
-              <h6>What's included:</h6>
-              <ul class="mb-0">
-                <li>Professional experience & skills</li>
-                <li>Education & certifications</li>
-                <li>Portfolio highlights</li>
-                <li>Contact information</li>
-              </ul>
-            </div>
-          </div>
-          <div class="modal-footer border-0">
-            <a href="https://drive.google.com/file/d/1iYfZLGDgAwCYvapiesTbdtmPdykQjWPX/view?usp=drive_link" class="btn btn-dark w-100" download>
-              <i class="fas fa-download me-2"></i>Download CV (PDF)
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
+  <body class="bg-light">
+
+    <section class="experience-section py-5" id="experience">
+      <div class="container">
+        <h2 class="text-center fw-bold">My Experience</h2>
+        <p class="text-center text-muted mb-4">A journey through my professional growth, education, and achievements
+        </p>
 
 
-    <body class="bg-light">
-
-      <section class="experience-section py-5" id="experience">
-        <div class="container">
-          <h2 class="text-center fw-bold">My Experience</h2>
-          <p class="text-center text-muted mb-4">A journey through my professional growth, education, and achievements
-          </p>
-
-
-          <ul class="nav nav-pills justify-content-center mb-4 bg-light rounded-pill px-2 py-1" id="experienceTabs"
-            role="tablist">
-            <li class="nav-item" role="presentation">
-              <button class="nav-link active px-4 py-2 rounded-pill" id="work-tab" data-bs-toggle="pill"
-                data-bs-target="#work" type="button" role="tab">
-                <i class="bi bi-briefcase-fill me-1"></i> Work Experience
-              </button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button class="nav-link px-4 py-2 rounded-pill" id="edu-tab" data-bs-toggle="pill"
-                data-bs-target="#education" type="button" role="tab">
-                <i class="bi bi-mortarboard-fill me-1"></i> Education
-              </button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button class="nav-link px-4 py-2 rounded-pill" id="ach-tab" data-bs-toggle="pill"
-                data-bs-target="#achievements" type="button" role="tab">
-                <i class="bi bi-award-fill me-1"></i> Achievements
-              </button>
-            </li>
-          </ul>
+        <ul class="nav nav-pills justify-content-center mb-4 bg-light rounded-pill px-2 py-1" id="experienceTabs"
+          role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active px-4 py-2 rounded-pill" id="work-tab" data-bs-toggle="pill"
+              data-bs-target="#work" type="button" role="tab">
+              <i class="bi bi-briefcase-fill me-1"></i> Work Experience
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link px-4 py-2 rounded-pill" id="edu-tab" data-bs-toggle="pill"
+              data-bs-target="#education" type="button" role="tab">
+              <i class="bi bi-mortarboard-fill me-1"></i> Education
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link px-4 py-2 rounded-pill" id="ach-tab" data-bs-toggle="pill"
+              data-bs-target="#achievements" type="button" role="tab">
+              <i class="bi bi-award-fill me-1"></i> Achievements
+            </button>
+          </li>
+        </ul>
 
 
 
-          <div class="tab-content">
+        <div class="tab-content">
 
 
-            <div class="tab-pane fade show active" id="work" role="tabpanel">
-              <div class="timeline">
+          <div class="tab-pane fade show active" id="work" role="tabpanel">
+            <div class="timeline">
 
 
-                <!-- <div class="card mb-4 shadow-sm">
+              <!-- <div class="card mb-4 shadow-sm">
             <div class="card-body">
               <h5 class="fw-bold">Frontend Developer Intern</h5>
               <p><i class="bi bi-building me-1"></i> Tech Startup Indonesia</p>
@@ -332,8 +461,8 @@
             </div>
           </div> -->
 
-                <!-- Card 2 -->
-                <!-- <div class="card mb-4 shadow-sm">
+              <!-- Card 2 -->
+              <!-- <div class="card mb-4 shadow-sm">
             <div class="card-body">
               <h5 class="fw-bold">Web Developer</h5>
               <p><i class="bi bi-laptop me-1"></i> Freelance Projects</p>
@@ -348,8 +477,8 @@
             </div>
           </div> -->
 
-                <!-- Card 3 -->
-                <!-- <div class="card mb-4 shadow-sm">
+              <!-- Card 3 -->
+              <!-- <div class="card mb-4 shadow-sm">
             <div class="card-body">
               <h5 class="fw-bold">Junior Web Developer</h5>
               <p><i class="bi bi-code-slash me-1"></i> Digital Agency Medan</p>
@@ -364,63 +493,333 @@
             </div>
           </div> -->
 
-              </div>
             </div>
+          </div>
 
-            <!-- Education -->
-            <div class="tab-pane fade" id="education" role="tabpanel">
-              <div class="timeline">
+          <!-- Education -->
+          <div class="tab-pane fade" id="education" role="tabpanel">
+            <div class="timeline">
 
-                <!-- University -->
-                <div class="card mb-4 shadow-sm">
-                  <div class="card-body">
-                    <h5 class="fw-bold">Bachelor of Computer Science</h5>
-                    <p><i class="bi bi-building me-1"></i> Universitas New Mansoura University</p>
-                    <p class="text-muted"><i class="bi bi-calendar2 me-1"></i> 2023 -2027 | <i
-                        class="bi bi-geo-alt me-1"></i> New Mansoura, egypet</p>
-                    <p>Focus on Software Engineering & Web Development. Active in student programming association.</p>
-                    <div>
-                      <span class="badge bg-dark">Data Structures</span>
-                      <span class="badge bg-dark">Web Programming</span>
-                      <span class="badge bg-dark">Database Systems</span>
-                      <span class="badge bg-dark">Software Engineering</span>
-                    </div>
+              <!-- University -->
+              <div class="card mb-4 shadow-sm">
+                <div class="card-body">
+                  <h5 class="fw-bold">Bachelor of Computer Science</h5>
+                  <p><i class="bi bi-building me-1"></i> Universitas New Mansoura University</p>
+                  <p class="text-muted"><i class="bi bi-calendar2 me-1"></i> 2023 -2027 | <i
+                      class="bi bi-geo-alt me-1"></i> New Mansoura, egypet</p>
+                  <p>Focus on Software Engineering & Web Development. Active in student programming association.</p>
+                  <div>
+                    <span class="badge bg-dark">Data Structures</span>
+                    <span class="badge bg-dark">Web Programming</span>
+                    <span class="badge bg-dark">Database Systems</span>
+                    <span class="badge bg-dark">Software Engineering</span>
                   </div>
                 </div>
+              </div>
 
-                <!-- ITI -->
-                <div class="card mb-4 shadow-sm">
-                  <div class="card-body">
-                    <h5 class="fw-bold">Frontend</h5>
-                    <p><i class="bi bi-building me-1"></i>ITI</p>
-                    <p class="text-muted"><i class="bi bi-calendar2 me-1"></i> 2025 | <i class="bi bi-geo-alt me-1"></i>
-                      egypet</p>
-                    <p>Applied analytical thinking from science background to build structured and scalable frontend
-                      solutions.</p>
-                    <div>
-                      <span class="badge bg-dark">html</span>
-                      <span class="badge bg-dark">css</span>
+              <!-- ITI -->
+              <div class="card mb-4 shadow-sm">
+                <div class="card-body">
+                  <h5 class="fw-bold">Frontend</h5>
+                  <p><i class="bi bi-building me-1"></i>ITI</p>
+                  <p class="text-muted"><i class="bi bi-calendar2 me-1"></i> 2025 | <i class="bi bi-geo-alt me-1"></i>
+                    egypet</p>
+                  <p>Applied analytical thinking from science background to build structured and scalable frontend
+                    solutions.</p>
+                  <div>
+                    <span class="badge bg-dark">html</span>
+                    <span class="badge bg-dark">css</span>
+                    <span class="badge bg-dark">JavaScript</span>
+                    <span class="badge bg-dark">bootstrap</span>
+                  </div>
+                </div>
+              </div>
+              <!--NTI-->
+              <div class="card mb-4 shadow-sm">
+                <div class="card-body">
+                  <h5 class="fw-bold">FullStack</h5>
+                  <p><i class="bi bi-building me-1"></i>NTI</p>
+                  <p class="text-muted"><i class="bi bi-calendar2 me-1"></i> 2025 | <i class="bi bi-geo-alt me-1"></i>
+                    egypet</p>
+                  <p>Developed scalable full-stack applications by integrating logic from scientific studies with
+                    modern web technologies.</p>
+                  <div>
+                    <span class="badge bg-dark">PHP</span>
+                    <span class="badge bg-dark">LARAVEL</span>
+                    <span class="badge bg-dark">MYSQL</span>
+                    <span class="badge bg-dark">OPP</span>
+                    <span class="badge bg-dark">Basics for Front End</span>
+
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Achievements -->
+          <div class="tab-pane fade" id="achievements" role="tabpanel">
+            <div class="container">
+              <div class="card border-0 shadow-lg rounded-4 p-4">
+                <div class="row g-4">
+                  <!-- First certificate card -->
+                  <style>
+                    body {
+                      background-color: #f8f9fa;
+                    }
+
+                    .badge-custom {
+                      background-color: #dcfce7;
+                      color: #15803d;
+                      font-weight: 600;
+                      border-radius: 50rem;
+                      padding: 0.35rem 0.75rem;
+                      font-size: 0.9rem;
+                    }
+
+                    .desc {
+                      color: #495057;
+                      line-height: 1.8;
+                    }
+
+                    .icon-box {
+                      width: 40px;
+                      height: 40px;
+                    }
+
+                    .custom-btn {
+                      border-radius: 20px;
+                      padding: 4px 12px;
+                      font-size: 0.85rem;
+                      transition: all 0.3s ease;
+                    }
+
+                    .custom-btn:hover {
+                      background-color: #000;
+                      color: #fff;
+                      border-color: #000;
+                    }
+                  </style>
+                  </head>
+
+                  <body class="py-5">
+
+                    <div class="container my-5">
+                      <div class="row g-4">
+
+                        <!-- Certificate Card -->
+                        <div class="col-lg-6 col-md-6 col-sm-12">
+                          <div class="card border-0 shadow-sm rounded-4 h-100">
+                            <div class="card-body p-4 d-flex flex-column">
+                              <div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
+                                <span class="badge-custom"><i class="fa-solid fa-award me-1"></i> Certificate</span>
+                                <small class="text-muted"><i class="fa-regular fa-calendar me-1"></i> 2025</small>
+                              </div>
+                              <div class="d-flex align-items-start gap-3 mb-3">
+                                <div
+                                  class="border rounded icon-box p-2 d-flex align-items-center justify-content-center">
+                                  <i class="fa-solid fa-building text-secondary"></i>
+                                </div>
+                                <div>
+                                  <h5 class="mb-1 fw-bold">Frontend Development Certificate</h5>
+                                  <div class="text-muted"><i class="fa-solid fa-school me-1"></i> ITI</div>
+                                </div>
+                              </div>
+                              <p class="desc mb-3">
+                                Completed a comprehensive frontend development course covering HTML, CSS, JavaScript,
+                                and Bootstrap.
+                              </p>
+                              <a href="#" target="_blank" class="btn btn-sm btn-outline-dark custom-btn">View
+                                Certificate</a>
+                            </div>
+                          </div>
+                        </div>
+
+                        <!-- Second Card -->
+                        <div class="col-lg-6 col-md-6 col-sm-12">
+                          <div class="card border-0 shadow-sm rounded-4 h-100">
+                            <div class="card-body p-4 d-flex flex-column">
+                              <div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
+                                <span class="badge-custom"><i class="fa-solid fa-award me-1"></i> Certificate</span>
+                                <small class="text-muted"><i class="fa-regular fa-calendar me-1"></i> 2025</small>
+                              </div>
+                              <div class="d-flex align-items-start gap-3 mb-3">
+                                <div
+                                  class="border rounded icon-box p-2 d-flex align-items-center justify-content-center">
+                                  <i class="fa-solid fa-building text-secondary"></i>
+                                </div>
+                                <div>
+                                  <h5 class="mb-1 fw-bold">Backend Developer with PHP</h5>
+                                  <div class="text-muted"><i class="fa-solid fa-school me-1"></i> NTI</div>
+                                </div>
+                              </div>
+                              <p class="desc mb-3">
+                                Learned PHP, Laravel, OOP, MySQL with hands-on projects.
+                              </p>
+                              <a href="https://www.linkedin.com/in/abdallah-mohamed-9487861a1/details/certifications/1755179105266/single-media-viewer/?profileId=ACoAAC9HWcgB_Xw5cGWMxGykecMSIXz3o-DMOHM"
+                                target="_blank" class="btn btn-sm btn-outline-dark custom-btn">View Certificate</a>
+                            </div>
+                          </div>
+                        </div>
+
+                        <!-- Third Card -->
+                        <div class="col-lg-6 col-md-6 col-sm-12">
+                          <div class="card border-0 shadow-sm rounded-4 h-100">
+                            <div class="card-body p-4 d-flex flex-column">
+                              <div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
+                                <span class="badge-custom"><i class="fa-solid fa-award me-1"></i> Certificate</span>
+                                <small class="text-muted"><i class="fa-regular fa-calendar me-1"></i> 2025</small>
+                              </div>
+                              <div class="d-flex align-items-start gap-3 mb-3">
+                                <div
+                                  class="border rounded icon-box p-2 d-flex align-items-center justify-content-center">
+                                  <i class="fa-solid fa-building text-secondary"></i>
+                                </div>
+                                <div>
+                                  <h5 class="mb-1 fw-bold">Artificial Intelligence Program</h5>
+                                  <div class="text-muted"><i class="fa-solid fa-school me-1"></i> alx_africa</div>
+                                </div>
+                              </div>
+                              <p class="desc mb-3">
+                                Learned and used AI tools effectively.
+                              </p>
+                              <a href="https://www.linkedin.com/in/abdallah-mohamed-9487861a1/details/certifications/1753099048376/single-media-viewer/?profileId=ACoAAC9HWcgB_Xw5cGWMxGykecMSIXz3o-DMOHM"
+                                target="_blank" class="btn btn-sm btn-outline-dark custom-btn">View Certificate</a>
+                            </div>
+                          </div>
+                        </div>
+
+                        <!-- Fourth Card -->
+                        <div class="col-lg-6 col-md-6 col-sm-12">
+                          <div class="card border-0 shadow-sm rounded-4 h-100">
+                            <div class="card-body p-4 d-flex flex-column">
+                              <div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
+                                <span class="badge-custom"><i class="fa-solid fa-award me-1"></i> Certificate</span>
+                                <small class="text-muted"><i class="fa-regular fa-calendar me-1"></i> 2025</small>
+                              </div>
+                              <div class="d-flex align-items-start gap-3 mb-3">
+                                <div
+                                  class="border rounded icon-box p-2 d-flex align-items-center justify-content-center">
+                                  <i class="fa-solid fa-building text-secondary"></i>
+                                </div>
+                                <div>
+                                  <h5 class="mb-1 fw-bold">Database, MySQL</h5>
+                                  <div class="text-muted"><i class="fa-solid fa-school me-1"></i> Mahara-tech</div>
+                                </div>
+                              </div>
+                              <p class="desc mb-3">
+                                Transact-SQL Queries Using SQL Server.
+                              </p>
+                              <a href="https://www.linkedin.com/in/abdallah-mohamed-9487861a1/details/certifications/1753099435609/single-media-viewer/?profileId=ACoAAC9HWcgB_Xw5cGWMxGykecMSIXz3o-DMOHM"
+                                target="_blank" class="btn btn-sm btn-outline-dark custom-btn">View Certificate</a>
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+
+    </section>
+
+    <section class="py-5" id="projects">
+      <div class="container">
+        <div class="card shadow-lg rounded-4 p-4 border-0">
+
+
+          <h2 class="text-center fw-bold mb-2">My Projects</h2>
+          <p class="text-center text-muted mb-4">A showcase of my development work across web, mobile, and open source
+            projects</p>
+
+          <!-- Nav Pills -->
+          <ul class="nav nav-pills justify-content-center mb-4 bg-light rounded-pill px-2 py-1" id="projectTabs"
+            role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link px-4 py-2 rounded-pill" id="web-tab" data-bs-toggle="pill" data-bs-target="#web"
+                type="button" role="tab">
+                <i class="bi bi-globe2 me-1"></i> Web Projects
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link px-4 py-2 rounded-pill" id="mobile-tab" data-bs-toggle="pill"
+                data-bs-target="#mobile" type="button" role="tab">
+                <i class="bi bi-phone me-1"></i> Mobile Apps
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active px-4 py-2 rounded-pill" id="open-tab" data-bs-toggle="pill"
+                data-bs-target="#open" type="button" role="tab">
+                <i class="bi bi-code-slash me-1"></i> Open Source
+              </button>
+            </li>
+          </ul>
+
+
+          <div class="tab-content">
+
+            <!-- Web Projects -->
+            <div class="tab-pane fade" id="web" role="tabpanel">
+              <div class="row g-4">
+
+                <!-- Project 1 -->
+                <div class="col-md-6 d-flex">
+                  <div class="card shadow-sm rounded-4 p-4 border-0 w-100 h-100 d-flex flex-column">
+                    <div class="d-flex justify-content-between mb-3">
+                      <span class="badge bg-warning text-dark"><i class="bi bi-star-fill me-1"></i> Featured</span>
+                      <span class="badge bg-success">Completed</span>
+                    </div>
+                    <h5 class="fw-bold">Article App</h5>
+                    <p class="text-muted">Full Stack Web Application</p>
+                    <p class="flex-grow-1">
+                      A full-featured article management system allowing users to create, edit, delete,
+                      and view articles, built with Laravel and MySQL, following OOP principles.
+                    </p>
+                    <p class="text-muted mb-3"><i class="bi bi-calendar3 me-1"></i> Jan 2025 – Mar 2025</p>
+                    <div class="mb-3 d-flex flex-wrap gap-2">
+                      <span class="badge bg-dark">HTML</span>
+                      <span class="badge bg-dark">CSS</span>
+                      <span class="badge bg-dark">Bootstrap</span>
                       <span class="badge bg-dark">JavaScript</span>
-                      <span class="badge bg-dark">bootstrap</span>
-                    </div>
-                  </div>
-                </div>
-                <!--NTI-->
-                <div class="card mb-4 shadow-sm">
-                  <div class="card-body">
-                    <h5 class="fw-bold">FullStack</h5>
-                    <p><i class="bi bi-building me-1"></i>NTI</p>
-                    <p class="text-muted"><i class="bi bi-calendar2 me-1"></i> 2025 | <i class="bi bi-geo-alt me-1"></i>
-                      egypet</p>
-                    <p>Developed scalable full-stack applications by integrating logic from scientific studies with
-                      modern web technologies.</p>
-                    <div>
                       <span class="badge bg-dark">PHP</span>
-                      <span class="badge bg-dark">LARAVEL</span>
-                      <span class="badge bg-dark">MYSQL</span>
-                      <span class="badge bg-dark">OPP</span>
-                      <span class="badge bg-dark">Basics for Front End</span>
+                      <span class="badge bg-dark">Laravel</span>
+                      <span class="badge bg-dark">OOP</span>
+                      <span class="badge bg-dark">MySQL</span>
+                    </div>
+                    <div class="mt-auto d-flex justify-content-between gap-2">
+                      <a href="https://github.com/ABBOUD2004/article-.git" class="btn btn-dark w-100"><i
+                          class="bi bi-code-slash me-1"></i> Code</a>
+                      <a href="#" class="btn btn-outline-dark w-100"><i class="bi bi-box-arrow-up-right me-1"></i>
+                        Demo</a>
+                    </div>
+                  </div>
+                </div>
 
+                <!-- Project 2 -->
+                <div class="col-md-6 d-flex">
+                  <div class="card shadow-sm rounded-4 p-4 border-0 w-100 h-100 d-flex flex-column">
+                    <div class="d-flex justify-content-between mb-3">
+                      <span class="badge bg-warning text-dark"><i class="bi bi-star-fill me-1"></i> Featured</span>
+                      <span class="badge bg-success">Completed</span>
+                    </div>
+                    <h5 class="fw-bold">Student Management System</h5>
+                    <p class="text-muted">Full Stack Web Application</p>
+                    <p class="flex-grow-1">
+                      A complete student management platform with features for adding, editing, deleting,
+                      and searching student records, using PHP, MySQL, and Bootstrap.
+                    </p>
+                    <p class="text-muted mb-3"><i class="bi bi-calendar3 me-1"></i> Mar 2025 – May 2025</p>
+                    <div class="mb-3 d-flex flex-wrap gap-2">
+                      <span class="badge bg-dark">PHP</span>
+                      <span class="badge bg-dark">HTML</span>
+                      <span class="badge bg-dark">CSS</span>
+                      <span class="badge bg-dark">JavaScript</span>
+                      <span class="badge bg-dark">MySQL</span>
+                      <span class="badge bg-dark">Bootstrap</span>
+                    </div>
+                    <div class="mt-auto d-flex justify-content-between gap-2">
+                      <a href="https://github.com/ABBOUD2004/student-list.git" class="btn btn-dark w-100"><i
+                          class="bi bi-code-slash me-1"></i> Code</a>
+                      <a href="#" class="btn btn-outline-dark w-100"><i class="bi bi-box-arrow-up-right me-1"></i>
+                        Demo</a>
                     </div>
                   </div>
                 </div>
@@ -428,258 +827,12 @@
               </div>
             </div>
 
-            <!-- Achievements -->
-            <div class="tab-pane fade" id="achievements" role="tabpanel">
-        <div class="container">
-  <div class="card border-0 shadow-lg rounded-4 p-4">
-    <div class="row g-4">
-      <!-- First certificate card -->
-     <style>
-    body { background-color: #f8f9fa; }
-    .badge-custom { background-color: #dcfce7; color: #15803d; font-weight: 600; border-radius: 50rem; padding: 0.35rem 0.75rem; font-size: 0.9rem; }
-    .desc { color: #495057; line-height: 1.8; }
-    .icon-box { width: 40px; height: 40px; }
-      .custom-btn {
-      border-radius: 20px;
-      padding: 4px 12px;
-      font-size: 0.85rem;
-      transition: all 0.3s ease;
-    }
-    .custom-btn:hover {
-      background-color: #000;
-      color: #fff;
-      border-color: #000;
-    }
-    
-    }
-  </style>
-</head>
-<body class="py-5">
-
-<div class="container">
-  <div class="card border-0 shadow-lg rounded-4 p-4">
-    <div class="row g-4">
-      
-      <!-- Certificate Card -->
-      <div class="col-md-6">
-        <div class="card border-0 shadow-sm rounded-4 h-100">
-          <div class="card-body p-4 d-flex flex-column">
-            <div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
-              <span class="badge-custom"><i class="fa-solid fa-award me-1"></i> Certificate</span>
-              <small class="text-muted"><i class="fa-regular fa-calendar me-1"></i> 2025</small>
-            </div>
-            <div class="d-flex align-items-start gap-3 mb-3">
-              <div class="border rounded icon-box p-2 d-flex align-items-center justify-content-center">
-                <i class="fa-solid fa-building text-secondary"></i>
-              </div>
-              <div>
-                <h5 class="mb-1 fw-bold">Frontend Development Certificate</h5>
-                <div class="text-muted"><i class="fa-solid fa-school me-1"></i> ITI</div>
-              </div>
-            </div>
-            <p class="desc mb-3">
-              Completed a comprehensive frontend development course covering HTML, CSS, JavaScript, and Bootstrap.
-            </p>
-                  <a href="#" target="_blank" class="btn btn-sm btn-outline-dark custom-btn">View Certificate</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Second Card -->
-      <div class="col-md-6">
-        <div class="card border-0 shadow-sm rounded-4 h-100">
-          <div class="card-body p-4 d-flex flex-column">
-            <div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
-              <span class="badge-custom"><i class="fa-solid fa-award me-1"></i> Certificate</span>
-              <small class="text-muted"><i class="fa-regular fa-calendar me-1"></i> 2025</small>
-            </div>
-            <div class="d-flex align-items-start gap-3 mb-3">
-              <div class="border rounded icon-box p-2 d-flex align-items-center justify-content-center">
-                <i class="fa-solid fa-building text-secondary"></i>
-              </div>
-              <div>
-                <h5 class="mb-1 fw-bold">Backend Developer with PHP</h5>
-                <div class="text-muted"><i class="fa-solid fa-school me-1"></i> NTI</div>
-              </div>
-            </div>
-            <p class="desc mb-3">
-              Learned PHP, Laravel, OOP, MySQL with hands-on projects.
-            </p>
-            <br>
-                  <a href="https://www.linkedin.com/in/abdallah-mohamed-9487861a1/details/certifications/1755179105266/single-media-viewer/?profileId=ACoAAC9HWcgB_Xw5cGWMxGykecMSIXz3o-DMOHM" target="_blank" class="btn btn-sm btn-outline-dark custom-btn">View Certificate</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Third Card -->
-      <div class="col-md-6">
-        <div class="card border-0 shadow-sm rounded-4 h-100">
-          <div class="card-body p-4 d-flex flex-column">
-            <div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
-              <span class="badge-custom"><i class="fa-solid fa-award me-1"></i> Certificate</span>
-              <small class="text-muted"><i class="fa-regular fa-calendar me-1"></i> 2025</small>
-            </div>
-            <div class="d-flex align-items-start gap-3 mb-3">
-              <div class="border rounded icon-box p-2 d-flex align-items-center justify-content-center">
-                <i class="fa-solid fa-building text-secondary"></i>
-              </div>
-              <div>
-                <h5 class="mb-1 fw-bold">Artificial Intelligence Program</h5>
-                <div class="text-muted"><i class="fa-solid fa-school me-1"></i>alx_africa</div>
-              </div>
-            </div>
-            <p class="desc mb-3">
-              Learned and used AI tools effectively.
-            </p>
-                  <a href="https://www.linkedin.com/in/abdallah-mohamed-9487861a1/details/certifications/1753099048376/single-media-viewer/?profileId=ACoAAC9HWcgB_Xw5cGWMxGykecMSIXz3o-DMOHM" target="_blank" class="btn btn-sm btn-outline-dark custom-btn">View Certificate</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Fourth Card -->
-      <div class="col-md-6">
-        <div class="card border-0 shadow-sm rounded-4 h-100">
-          <div class="card-body p-4 d-flex flex-column">
-            <div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
-              <span class="badge-custom"><i class="fa-solid fa-award me-1"></i> Certificate</span>
-              <small class="text-muted"><i class="fa-regular fa-calendar me-1"></i> 2025</small>
-            </div>
-            <div class="d-flex align-items-start gap-3 mb-3">
-              <div class="border rounded icon-box p-2 d-flex align-items-center justify-content-center">
-                <i class="fa-solid fa-building text-secondary"></i>
-              </div>
-              <div>
-                <h5 class="mb-1 fw-bold">Database, MySQL</h5>
-                <div class="text-muted"><i class="fa-solid fa-school me-1"></i> Mahara-tech</div>
-              </div>
-            </div>
-            <p class="desc mb-3">
-              Transact-SQL Queries Using SQL Server.
-            </p>
-                  <a href="https://www.linkedin.com/in/abdallah-mohamed-9487861a1/details/certifications/1753099435609/single-media-viewer/?profileId=ACoAAC9HWcgB_Xw5cGWMxGykecMSIXz3o-DMOHM" target="_blank" class="btn btn-sm btn-outline-dark custom-btn">View Certificate</a>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</div>
-
-
-      </div>
 
           </div>
         </div>
-      </section>
 
-      <section class="py-5" id="projects">
-        <div class="container">
-          <div class="card shadow-lg rounded-4 p-4 border-0">
-
-
-            <h2 class="text-center fw-bold mb-2">My Projects</h2>
-            <p class="text-center text-muted mb-4">A showcase of my development work across web, mobile, and open source
-              projects</p>
-
-            <!-- Nav Pills -->
-            <ul class="nav nav-pills justify-content-center mb-4 bg-light rounded-pill px-2 py-1" id="projectTabs"
-              role="tablist">
-              <li class="nav-item" role="presentation">
-                <button class="nav-link px-4 py-2 rounded-pill" id="web-tab" data-bs-toggle="pill" data-bs-target="#web"
-                  type="button" role="tab">
-                  <i class="bi bi-globe2 me-1"></i> Web Projects
-                </button>
-              </li>
-              <li class="nav-item" role="presentation">
-                <button class="nav-link px-4 py-2 rounded-pill" id="mobile-tab" data-bs-toggle="pill"
-                  data-bs-target="#mobile" type="button" role="tab">
-                  <i class="bi bi-phone me-1"></i> Mobile Apps
-                </button>
-              </li>
-              <li class="nav-item" role="presentation">
-                <button class="nav-link active px-4 py-2 rounded-pill" id="open-tab" data-bs-toggle="pill"
-                  data-bs-target="#open" type="button" role="tab">
-                  <i class="bi bi-code-slash me-1"></i> Open Source
-                </button>
-              </li>
-            </ul>
-
-
-            <div class="tab-content">
-
-      <!-- Web Projects -->
-<div class="tab-pane fade" id="web" role="tabpanel">
-  <div class="row g-4">
-
-    <!-- Project 1 -->
-    <div class="col-md-6 d-flex">
-      <div class="card shadow-sm rounded-4 p-4 border-0 w-100 h-100 d-flex flex-column">
-        <div class="d-flex justify-content-between mb-3">
-          <span class="badge bg-warning text-dark"><i class="bi bi-star-fill me-1"></i> Featured</span>
-          <span class="badge bg-success">Completed</span>
-        </div>
-        <h5 class="fw-bold">Article App</h5>
-        <p class="text-muted">Full Stack Web Application</p>
-        <p class="flex-grow-1">
-          A full-featured article management system allowing users to create, edit, delete, 
-          and view articles, built with Laravel and MySQL, following OOP principles.
-        </p>
-        <p class="text-muted mb-3"><i class="bi bi-calendar3 me-1"></i> Jan 2025 – Mar 2025</p>
-        <div class="mb-3 d-flex flex-wrap gap-2">
-          <span class="badge bg-dark">HTML</span>
-          <span class="badge bg-dark">CSS</span>
-          <span class="badge bg-dark">Bootstrap</span>
-          <span class="badge bg-dark">JavaScript</span>
-          <span class="badge bg-dark">PHP</span>
-          <span class="badge bg-dark">Laravel</span>
-          <span class="badge bg-dark">OOP</span>
-          <span class="badge bg-dark">MySQL</span>
-        </div>
-        <div class="mt-auto d-flex justify-content-between gap-2">
-          <a href="https://github.com/ABBOUD2004/article-.git" class="btn btn-dark w-100"><i class="bi bi-code-slash me-1"></i> Code</a>
-          <a href="#" class="btn btn-outline-dark w-100"><i class="bi bi-box-arrow-up-right me-1"></i> Demo</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- Project 2 -->
-    <div class="col-md-6 d-flex">
-      <div class="card shadow-sm rounded-4 p-4 border-0 w-100 h-100 d-flex flex-column">
-        <div class="d-flex justify-content-between mb-3">
-          <span class="badge bg-warning text-dark"><i class="bi bi-star-fill me-1"></i> Featured</span>
-          <span class="badge bg-success">Completed</span>
-        </div>
-        <h5 class="fw-bold">Student Management System</h5>
-        <p class="text-muted">Full Stack Web Application</p>
-        <p class="flex-grow-1">
-          A complete student management platform with features for adding, editing, deleting, 
-          and searching student records, using PHP, MySQL, and Bootstrap.
-        </p>
-        <p class="text-muted mb-3"><i class="bi bi-calendar3 me-1"></i> Mar 2025 – May 2025</p>
-        <div class="mb-3 d-flex flex-wrap gap-2">
-          <span class="badge bg-dark">PHP</span>
-          <span class="badge bg-dark">HTML</span>
-          <span class="badge bg-dark">CSS</span>
-          <span class="badge bg-dark">JavaScript</span>
-          <span class="badge bg-dark">MySQL</span>
-          <span class="badge bg-dark">Bootstrap</span>
-        </div>
-        <div class="mt-auto d-flex justify-content-between gap-2">
-          <a href="https://github.com/ABBOUD2004/student-list.git" class="btn btn-dark w-100"><i class="bi bi-code-slash me-1"></i> Code</a>
-          <a href="#" class="btn btn-outline-dark w-100"><i class="bi bi-box-arrow-up-right me-1"></i> Demo</a>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-
-  </div>
-</div>
-
-              <!-- Mobile Apps -->
-              <!-- 
+        <!-- Mobile Apps -->
+        <!-- 
   <div class="tab-pane fade" id="mobile" role="tabpanel">
     <div class="row g-4">
       <div class="col-md-6">
@@ -704,8 +857,8 @@
   </div>
   -->
 
-              <!-- Open Source -->
-              <!-- <div class="tab-pane fade show active" id="open" role="tabpanel">
+        <!-- Open Source -->
+        <!-- <div class="tab-pane fade show active" id="open" role="tabpanel">
     <div class="row g-4">
       <div class="col-12">
         <div class="card shadow-sm rounded-4 p-4 border-0 bg-light position-relative">
@@ -747,585 +900,703 @@
       </div>
     </div>
   </div> -->
-              <div class="col-md-9">
-                <div class="d-flex align-items-center mb-2">
+        <div class="col-md-9">
+          <div class="d-flex align-items-center mb-2">
 
-                </div>
-      </section>
+          </div>
+    </section>
 
-      <section id="skills" class="skills-section py-5" itemid="skills">
-        <div class="container">
-          <h2 class="text-center fw-bold mb-3">My Skills</h2>
-          <p class="text-center text-muted mb-4">
-            Technical expertise and proficiency across different domains of software development
-          </p>
+    <section id="skills" class="skills-section py-5" itemid="skills">
+      <div class="container">
+        <h2 class="text-center fw-bold mb-3">My Skills</h2>
+        <p class="text-center text-muted mb-4">
+          Technical expertise and proficiency across different domains of software development
+        </p>
 
-          <!-- Tabs -->
-          <ul class="nav nav-pills justify-content-center mb-4 bg-light rounded-pill px-2 py-1" id="skillsTabs"
-            role="tablist">
-            <li class="nav-item" role="presentation">
-              <button class="nav-link active px-4 py-2 rounded-pill" id="prog-tab" data-bs-toggle="pill"
-                data-bs-target="#prog" type="button" role="tab">
-                <i class="bi bi-code-slash me-1"></i> Programming
-              </button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button class="nav-link px-4 py-2 rounded-pill" id="frontend-tab" data-bs-toggle="pill"
-                data-bs-target="#frontend" type="button" role="tab">
-                <i class="bi bi-palette me-1"></i> Frontend
-              </button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button class="nav-link px-4 py-2 rounded-pill" id="backend-tab" data-bs-toggle="pill"
-                data-bs-target="#backend" type="button" role="tab">
-                <i class="bi bi-server me-1"></i> Backend
-              </button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button class="nav-link px-4 py-2 rounded-pill" id="tools-tab" data-bs-toggle="pill"
-                data-bs-target="#tools" type="button" role="tab">
-                <i class="bi bi-tools me-1"></i> Tools
-              </button>
-            </li>
-          </ul>
+        <!-- Tabs -->
+        <ul class="nav nav-pills justify-content-center mb-4 bg-light rounded-pill px-2 py-1" id="skillsTabs"
+          role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active px-4 py-2 rounded-pill" id="prog-tab" data-bs-toggle="pill"
+              data-bs-target="#prog" type="button" role="tab">
+              <i class="bi bi-code-slash me-1"></i> Programming
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link px-4 py-2 rounded-pill" id="frontend-tab" data-bs-toggle="pill"
+              data-bs-target="#frontend" type="button" role="tab">
+              <i class="bi bi-palette me-1"></i> Frontend
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link px-4 py-2 rounded-pill" id="backend-tab" data-bs-toggle="pill"
+              data-bs-target="#backend" type="button" role="tab">
+              <i class="bi bi-server me-1"></i> Backend
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link px-4 py-2 rounded-pill" id="tools-tab" data-bs-toggle="pill" data-bs-target="#tools"
+              type="button" role="tab">
+              <i class="bi bi-tools me-1"></i> Tools
+            </button>
+          </li>
+        </ul>
 
-          <!-- Tabs Content -->
-          <div class="tab-content">
-            <!-- Programming -->
-            <div class="tab-pane fade show active" id="prog" role="tabpanel">
-              <div class="row g-4">
-                <!-- Add your programming skills here -->
-                <div class="col-md-4">
-                  <div class="card p-3 shadow-sm rounded-4 border-0">
-                    <h5 class="fw-bold">JavaScript</h5>
-                    <div class="progress mb-2">
-                      <div class="progress-bar bg-dark" style="width: 70%">70%</div>
-                    </div>
-                    <span class="badge bg-light text-dark">Language</span>
+        <!-- Tabs Content -->
+        <div class="tab-content">
+          <!-- Programming -->
+          <div class="tab-pane fade show active" id="prog" role="tabpanel">
+            <div class="row g-4">
+              <!-- Add your programming skills here -->
+              <div class="col-md-4">
+                <div class="card p-3 shadow-sm rounded-4 border-0">
+                  <h5 class="fw-bold">JavaScript</h5>
+                  <div class="progress mb-2">
+                    <div class="progress-bar bg-dark" style="width: 70%">70%</div>
                   </div>
+                  <span class="badge bg-light text-dark">Language</span>
                 </div>
-                <div class="col-md-4">
-                  <div class="card p-3 shadow-sm rounded-4 border-0">
-                    <h5 class="fw-bold">C++</h5>
-                    <div class="progress mb-2">
-                      <div class="progress-bar bg-dark" style="width: 85%">85%</div>
-                    </div>
-                    <span class="badge bg-light text-dark">Language</span>
+              </div>
+              <div class="col-md-4">
+                <div class="card p-3 shadow-sm rounded-4 border-0">
+                  <h5 class="fw-bold">C++</h5>
+                  <div class="progress mb-2">
+                    <div class="progress-bar bg-dark" style="width: 85%">85%</div>
                   </div>
+                  <span class="badge bg-light text-dark">Language</span>
                 </div>
-                <div class="col-md-4">
-                  <div class="card p-3 shadow-sm rounded-4 border-0">
-                    <h5 class="fw-bold">PHP</h5>
-                    <div class="progress mb-2">
-                      <div class="progress-bar bg-dark" style="width: 75%">75%</div>
-                    </div>
-                    <span class="badge bg-light text-dark">Language</span>
+              </div>
+              <div class="col-md-4">
+                <div class="card p-3 shadow-sm rounded-4 border-0">
+                  <h5 class="fw-bold">PHP</h5>
+                  <div class="progress mb-2">
+                    <div class="progress-bar bg-dark" style="width: 75%">75%</div>
                   </div>
+                  <span class="badge bg-light text-dark">Language</span>
                 </div>
               </div>
             </div>
+          </div>
 
-            <!-- Frontend -->
-            <div class="tab-pane fade" id="frontend" role="tabpanel">
-              <div class="row g-4">
-                <div class="col-md-4">
-                  <div class="card p-3 shadow-sm rounded-4 border-0">
-                    <h5 class="fw-bold">HTML5</h5>
-                    <div class="progress mb-2">
-                      <div class="progress-bar bg-success" style="width: 95%">95%</div>
-                    </div>
-                    <span class="badge bg-light text-dark">Markup</span>
+          <!-- Frontend -->
+          <div class="tab-pane fade" id="frontend" role="tabpanel">
+            <div class="row g-4">
+              <div class="col-md-4">
+                <div class="card p-3 shadow-sm rounded-4 border-0">
+                  <h5 class="fw-bold">HTML5</h5>
+                  <div class="progress mb-2">
+                    <div class="progress-bar bg-success" style="width: 95%">95%</div>
                   </div>
+                  <span class="badge bg-light text-dark">Markup</span>
                 </div>
-                <div class="col-md-4">
-                  <div class="card p-3 shadow-sm rounded-4 border-0">
-                    <h5 class="fw-bold">React.js</h5>
-                    <div class="progress mb-2">
-                      <div class="progress-bar bg-success" style="width: 95%">95%</div>
-                    </div>
-                    <span class="badge bg-light text-dark">Framework</span>
+              </div>
+              <div class="col-md-4">
+                <div class="card p-3 shadow-sm rounded-4 border-0">
+                  <h5 class="fw-bold">React.js</h5>
+                  <div class="progress mb-2">
+                    <div class="progress-bar bg-success" style="width: 95%">95%</div>
                   </div>
+                  <span class="badge bg-light text-dark">Framework</span>
                 </div>
-                <div class="col-md-4">
-                  <div class="card p-3 shadow-sm rounded-4 border-0">
-                    <h5 class="fw-bold">CSS3</h5>
-                    <div class="progress mb-2">
-                      <div class="progress-bar bg-success" style="width: 90%">90%</div>
-                    </div>
-                    <span class="badge bg-light text-dark">Styling</span>
+              </div>
+              <div class="col-md-4">
+                <div class="card p-3 shadow-sm rounded-4 border-0">
+                  <h5 class="fw-bold">CSS3</h5>
+                  <div class="progress mb-2">
+                    <div class="progress-bar bg-success" style="width: 90%">90%</div>
                   </div>
+                  <span class="badge bg-light text-dark">Styling</span>
                 </div>
-                <div class="col-md-4">
-                  <div class="card p-3 shadow-sm rounded-4 border-0">
-                    <h5 class="fw-bold">bootstrap</h5>
-                    <div class="progress mb-2">
-                      <div class="progress-bar bg-success" style="width: 80%">80%</div>
-                    </div>
-                    <span class="badge bg-light text-dark">Framework</span>
+              </div>
+              <div class="col-md-4">
+                <div class="card p-3 shadow-sm rounded-4 border-0">
+                  <h5 class="fw-bold">bootstrap</h5>
+                  <div class="progress mb-2">
+                    <div class="progress-bar bg-success" style="width: 80%">80%</div>
                   </div>
+                  <span class="badge bg-light text-dark">Framework</span>
                 </div>
               </div>
             </div>
+          </div>
 
-            <!-- Backend -->
-            <div class="tab-pane fade" id="backend" role="tabpanel">
-              <div class="row g-4">
-                <div class="col-md-4">
-                  <div class="card p-3 shadow-sm rounded-4 border-0">
-                    <h5 class="fw-bold">LARAVEL</h5>
-                    <div class="progress mb-2">
-                      <div class="progress-bar bg-primary" style="width: 80%">80%</div>
-                    </div>
-                    <span class="badge bg-light text-dark">Framework</span>
+          <!-- Backend -->
+          <div class="tab-pane fade" id="backend" role="tabpanel">
+            <div class="row g-4">
+              <div class="col-md-4">
+                <div class="card p-3 shadow-sm rounded-4 border-0">
+                  <h5 class="fw-bold">LARAVEL</h5>
+                  <div class="progress mb-2">
+                    <div class="progress-bar bg-primary" style="width: 80%">80%</div>
                   </div>
+                  <span class="badge bg-light text-dark">Framework</span>
                 </div>
-                <div class="col-md-4">
-                  <div class="card p-3 shadow-sm rounded-4 border-0">
-                    <h5 class="fw-bold">PHP</h5>
-                    <div class="progress mb-2">
-                      <div class="progress-bar bg-primary" style="width: 70%">70%</div>
-                    </div>
-                    <span class="badge bg-light text-dark">Language</span>
+              </div>
+              <div class="col-md-4">
+                <div class="card p-3 shadow-sm rounded-4 border-0">
+                  <h5 class="fw-bold">PHP</h5>
+                  <div class="progress mb-2">
+                    <div class="progress-bar bg-primary" style="width: 70%">70%</div>
                   </div>
+                  <span class="badge bg-light text-dark">Language</span>
                 </div>
-                <div class="col-md-4">
-                  <div class="card p-3 shadow-sm rounded-4 border-0">
-                    <h5 class="fw-bold">MySQL</h5>
-                    <div class="progress mb-2">
-                      <div class="progress-bar bg-primary" style="width: 75%">75%</div>
-                    </div>
-                    <span class="badge bg-light text-dark">Database</span>
+              </div>
+              <div class="col-md-4">
+                <div class="card p-3 shadow-sm rounded-4 border-0">
+                  <h5 class="fw-bold">MySQL</h5>
+                  <div class="progress mb-2">
+                    <div class="progress-bar bg-primary" style="width: 75%">75%</div>
                   </div>
+                  <span class="badge bg-light text-dark">Database</span>
                 </div>
-                <div class="col-md-4">
-                  <div class="card p-3 shadow-sm rounded-4 border-0">
-                    <h5 class="fw-bold">REST API</h5>
-                    <div class="progress mb-2">
-                      <div class="progress-bar bg-primary" style="width: 75%">75%</div>
-                    </div>
-                    <span class="badge bg-light text-dark">Architecture</span>
+              </div>
+              <div class="col-md-4">
+                <div class="card p-3 shadow-sm rounded-4 border-0">
+                  <h5 class="fw-bold">REST API</h5>
+                  <div class="progress mb-2">
+                    <div class="progress-bar bg-primary" style="width: 75%">75%</div>
                   </div>
+                  <span class="badge bg-light text-dark">Architecture</span>
                 </div>
               </div>
             </div>
+          </div>
 
-            <!-- Tools -->
-            <div class="tab-pane fade" id="tools" role="tabpanel">
-              <div class="row g-4">
-                <div class="col-md-4">
-                  <div class="card p-3 shadow-sm rounded-4 border-0">
-                    <h5 class="fw-bold">Git</h5>
-                    <div class="progress mb-2">
-                      <div class="progress-bar bg-warning" style="width: 90%">90%</div>
-                    </div>
-                    <span class="badge bg-light text-dark">Version Control</span>
+          <!-- Tools -->
+          <div class="tab-pane fade" id="tools" role="tabpanel">
+            <div class="row g-4">
+              <div class="col-md-4">
+                <div class="card p-3 shadow-sm rounded-4 border-0">
+                  <h5 class="fw-bold">Git</h5>
+                  <div class="progress mb-2">
+                    <div class="progress-bar bg-warning" style="width: 90%">90%</div>
                   </div>
+                  <span class="badge bg-light text-dark">Version Control</span>
                 </div>
-                <div class="col-md-4">
-                  <div class="card p-3 shadow-sm rounded-4 border-0">
-                    <h5 class="fw-bold">VS Code</h5>
-                    <div class="progress mb-2">
-                      <div class="progress-bar bg-warning" style="width: 95%">95%</div>
-                    </div>
-                    <span class="badge bg-light text-dark">IDE</span>
+              </div>
+              <div class="col-md-4">
+                <div class="card p-3 shadow-sm rounded-4 border-0">
+                  <h5 class="fw-bold">VS Code</h5>
+                  <div class="progress mb-2">
+                    <div class="progress-bar bg-warning" style="width: 95%">95%</div>
                   </div>
+                  <span class="badge bg-light text-dark">IDE</span>
                 </div>
-                <div class="col-md-4">
-                  <div class="card p-3 shadow-sm rounded-4 border-0">
-                    <h5 class="fw-bold">GitHub</h5>
-                    <div class="progress mb-2">
-                      <div class="progress-bar bg-warning" style="width: 90%">90%</div>
-                    </div>
-                    <span class="badge bg-light text-dark">Design</span>
+              </div>
+              <div class="col-md-4">
+                <div class="card p-3 shadow-sm rounded-4 border-0">
+                  <h5 class="fw-bold">GitHub</h5>
+                  <div class="progress mb-2">
+                    <div class="progress-bar bg-warning" style="width: 90%">90%</div>
                   </div>
+                  <span class="badge bg-light text-dark">Design</span>
                 </div>
-                <div class="col-md-4">
-                  <div class="card p-3 shadow-sm rounded-4 border-0">
-                    <h5 class="fw-bold">Figma</h5>
-                    <div class="progress mb-2">
-                      <div class="progress-bar bg-warning" style="width: 90%">90%</div>
-                    </div>
-                    <span class="badge bg-light text-dark">Design</span>
+              </div>
+              <div class="col-md-4">
+                <div class="card p-3 shadow-sm rounded-4 border-0">
+                  <h5 class="fw-bold">Figma</h5>
+                  <div class="progress mb-2">
+                    <div class="progress-bar bg-warning" style="width: 90%">90%</div>
                   </div>
+                  <span class="badge bg-light text-dark">Design</span>
                 </div>
-                <div class="col-md-4">
-                  <div class="card p-3 shadow-sm rounded-4 border-0">
-                    <h5 class="fw-bold">Postman</h5>
-                    <div class="progress mb-2">
-                      <div class="progress-bar bg-warning" style="width: 90%">90%</div>
-                    </div>
-                    <span class="badge bg-light text-dark">API Testing</span>
+              </div>
+              <div class="col-md-4">
+                <div class="card p-3 shadow-sm rounded-4 border-0">
+                  <h5 class="fw-bold">Postman</h5>
+                  <div class="progress mb-2">
+                    <div class="progress-bar bg-warning" style="width: 90%">90%</div>
                   </div>
+                  <span class="badge bg-light text-dark">API Testing</span>
                 </div>
-                <div class="col-md-4">
-                  <div class="card p-3 shadow-sm rounded-4 border-0">
-                    <h5 class="fw-bold">WordPress</h5>
-                    <div class="progress mb-2">
-                      <div class="progress-bar bg-warning" style="width: 80%">80%</div>
-                    </div>
-                    <span class="badge bg-light text-dark">CMS</span>
+              </div>
+              <div class="col-md-4">
+                <div class="card p-3 shadow-sm rounded-4 border-0">
+                  <h5 class="fw-bold">WordPress</h5>
+                  <div class="progress mb-2">
+                    <div class="progress-bar bg-warning" style="width: 80%">80%</div>
                   </div>
+                  <span class="badge bg-light text-dark">CMS</span>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
 
 
 
-      <section id="testimonials" class="py-5" style="background-color: #f8f9fb;">
-        <div class="text-center mb-5">
-          <h2><strong>Client Testimonials</strong></h2>
-          <p class="text-muted">What my clients say about working with me and the results we've achieved together</p>
-          <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#testimonialModal">+ Add
-            Testimonial</button>
+    <section id="testimonials" class="py-5" style="background-color: #f8f9fb;">
+      <div class="text-center mb-5">
+        <h2><strong>Client Testimonials</strong></h2>
+        <p class="text-muted">What my clients say about working with me and the results we've achieved together</p>
+        <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#testimonialModal">+ Add
+          Testimonial</button>
+      </div>
+
+
+
+
+      <!-- Modal -->
+      <div class="modal fade" id="testimonialModal" tabindex="-1" aria-labelledby="testimonialModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content p-3">
+            <div class="modal-header">
+              <h5 class="modal-title" id="testimonialModalLabel">Share Your Experience</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="testimonialForm" method="POST" action="submit_testimonial.php" onsubmit="return confirmSubmit();">
+              <div class="modal-body">
+                <div class="mb-3"><input required name="name" type="text" class="form-control"
+                    placeholder="Your full name"></div>
+                <div class="mb-3"><input name="position" type="text" class="form-control" placeholder="Your job title">
+                </div>
+                <div class="mb-3"><input name="company" type="text" class="form-control" placeholder="Company name">
+                </div>
+                <div class="mb-3"><input name="project_type" type="text" class="form-control"
+                    placeholder="e.g., Website Design"></div>
+                <div class="mb-3">
+                  <select required class="form-select" name="rating">
+                    <option disabled selected>Select rating</option>
+                    <option value="5">★★★★★ Excellent</option>
+                    <option value="4">★★★★☆ Very Good</option>
+                    <option value="3">★★★☆☆ Good</option>
+                    <option value="2">★★☆☆☆ Fair</option>
+                    <option value="1">★☆☆☆☆ Poor</option>
+                  </select>
+                </div>
+                <div class="mb-3"><textarea name="message" class="form-control" required
+                    placeholder="Your experience..." rows="4"></textarea></div>
+              </div>
+              <div class="modal-footer"><button type="submit" class="btn btn-dark w-100">Submit Testimonial</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        function confirmSubmit() { }
+      </script>
+
+
+
+
+
+      <div class="row">
+        <!-- Testimonial 1 -->
+        <div class="col-md-4">
+          <div class="testimonial-card p-4 bg-white rounded-4 shadow-sm mb-4">
+            <div class="d-flex align-items-center mb-3">
+              <div class="initials-circle me-3">SJ</div>
+              <div>
+                <strong>Sarah Johnson</strong><br>
+                <small class="text-muted">Marketing Director<br>Tech Solutions Inc</small>
+              </div>
+            </div>
+            <div class="mb-2 text-warning">★★★★★</div>
+            <p class="text-muted">Hizkia delivered an outstanding website that exceeded our expectations. Her
+              attention to detail and creative approach made our brand stand out.</p>
+            <div class="d-flex justify-content-between">
+              <span class="tag">Corporate Website</span>
+              <span class="date">🗓️ March 2024</span>
+            </div>
+          </div>
         </div>
 
-
-
-
-        <!-- Modal -->
-        <div class="modal fade" id="testimonialModal" tabindex="-1" aria-labelledby="testimonialModalLabel"
-          aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content p-3">
-              <div class="modal-header">
-                <h5 class="modal-title" id="testimonialModalLabel">Share Your Experience</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <!-- Testimonial 2 -->
+        <div class="col-md-4">
+          <div class="testimonial-card p-4 bg-white rounded-4 shadow-sm mb-4">
+            <div class="d-flex align-items-center mb-3">
+              <div class="initials-circle me-3">MC</div>
+              <div>
+                <strong>Michael Chen</strong><br>
+                <small class="text-muted">Startup Founder<br>InnovateLab</small>
               </div>
-              <form id="testimonialForm" method="POST" action="submit_testimonial.php"
-                onsubmit="return confirmSubmit();">
-                <div class="modal-body">
-                  <div class="mb-3"><input required name="name" type="text" class="form-control"
-                      placeholder="Your full name"></div>
-                  <div class="mb-3"><input name="position" type="text" class="form-control"
-                      placeholder="Your job title"></div>
-                  <div class="mb-3"><input name="company" type="text" class="form-control" placeholder="Company name">
-                  </div>
-                  <div class="mb-3"><input name="project_type" type="text" class="form-control"
-                      placeholder="e.g., Website Design"></div>
-                  <div class="mb-3">
-                    <select required class="form-select" name="rating">
-                      <option disabled selected>Select rating</option>
-                      <option value="5">★★★★★ Excellent</option>
-                      <option value="4">★★★★☆ Very Good</option>
-                      <option value="3">★★★☆☆ Good</option>
-                      <option value="2">★★☆☆☆ Fair</option>
-                      <option value="1">★☆☆☆☆ Poor</option>
-                    </select>
-                  </div>
-                  <div class="mb-3"><textarea name="message" class="form-control" required
-                      placeholder="Your experience..." rows="4"></textarea></div>
+            </div>
+            <div class="mb-2 text-warning">★★★★★</div>
+            <p class="text-muted">Working with Hizkia was a game-changer for our startup. She created a modern,
+              responsive web application that our users love.</p>
+            <div class="d-flex justify-content-between">
+              <span class="tag">Web Application</span>
+              <span class="date">🗓️ February 2024</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Testimonial 3 -->
+        <div class="col-md-4">
+          <div class="testimonial-card p-4 bg-white rounded-4 shadow-sm mb-4">
+            <div class="d-flex align-items-center mb-3">
+              <div class="initials-circle me-3">LR</div>
+              <div>
+                <strong>Lisa Rodriguez</strong><br>
+                <small class="text-muted">E-commerce Manager<br>Fashion Hub</small>
+              </div>
+            </div>
+            <div class="mb-2 text-warning">★★★★★</div>
+            <p class="text-muted">Hizkia transformed our online store with a beautiful, user-friendly design. Sales
+              increased by 40% after the redesign. Amazing work!</p>
+            <div class="d-flex justify-content-between">
+              <span class="tag">E-commerce Platform</span>
+              <span class="date">🗓️ January 2024</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
+    </section>
+
+    <!-- Get In Touch Section -->
+    <section id="contact">
+      <div class="container py-5">
+        <h2 class="section-title">Get In Touch</h2>
+        <p class="section-subtitle">Ready to bring your ideas to life? Let’s discuss your next project and create
+          something amazing together</p>
+
+        <div class="row g-4">
+          <!-- Left Side -->
+          <div class="col-lg-6">
+            <h5><i class="bi bi-chat-left-text me-2"></i>Connect With Me</h5>
+            <p>Follow me on social media to stay updated with my latest projects, tech insights, and development
+              journey.</p>
+
+            <!-- LinkedIn -->
+            <div class="contact-card mb-3 d-flex align-items-start">
+              <i class="bi bi-linkedin contact-icon"></i>
+              <div>
+                <div class="social-label">
+                  LinkedIn
+                  <a href="https://www.linkedin.com/in/abdallah-mohamed-9487861a1/" target="_blank"
+                    class="social-handle d-inline-block ms-1 text-decoration-none">@abdallah.mohamed</a>
                 </div>
-                <div class="modal-footer"><button type="submit" class="btn btn-dark w-100">Submit Testimonial</button>
+                <div>Connect with me professionally and see my career journey</div>
+              </div>
+            </div>
+
+            <!-- GitHub -->
+            <div class="contact-card mb-3 d-flex align-items-start">
+              <i class="bi bi-github contact-icon"></i>
+              <div>
+                <div class="social-label">
+                  GitHub
+                  <a href="https://github.com/ABBOUD2004" target="_blank"
+                    class="social-handle d-inline-block ms-1 text-decoration-none">@ABBOUD2004</a>
+                </div>
+                <div>Check out my latest projects and open source contributions</div>
+              </div>
+            </div>
+
+            <!-- Twitter -->
+            <div class="contact-card mb-3 d-flex align-items-start">
+              <i class="bi bi-twitter contact-icon"></i>
+              <div>
+                <div class="social-label">
+                  Twitter
+                  <a href="#" target="_blank"
+                    class="social-handle d-inline-block ms-1 text-decoration-none">@abdallah_elsayed</a>
+                </div>
+                <div>Follow me for tech insights and development tips</div>
+              </div>
+            </div>
+
+            <!-- Instagram -->
+            <div class="contact-card mb-3 d-flex align-items-start">
+              <i class="bi bi-instagram contact-icon"></i>
+              <div>
+                <div class="social-label">
+                  Instagram
+                  <a href="https://www.instagram.com/abdallah.elsayed.1612/" target="_blank"
+                    class="social-handle d-inline-block ms-1 text-decoration-none">@abdallah.elsayed.1612</a>
+                </div>
+                <div>Behind the scenes of my development journey</div>
+              </div>
+            </div>
+
+            <!-- Facebook -->
+            <div class="contact-card d-flex align-items-start">
+              <i class="bi bi-facebook contact-icon"></i>
+              <div>
+                <div class="social-label">
+                  Facebook
+                  <a href="https://www.facebook.com/abdallah.elsayed.1612?locale=ar_AR" target="_blank"
+                    class="social-handle d-inline-block ms-1 text-decoration-none">@abdallah.elsayed.1612</a>
+                </div>
+                <div>Follow my personal updates and activities</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Side -->
+          <div class="col-lg-6">
+            <h5><i class="bi bi-envelope-paper me-2"></i>Contact Form</h5>
+            <p>Have a project in mind? Send me a message and I’ll get back to you as soon as possible.</p>
+
+            <div class="form-section">
+              <form action="contact.php" method="POST">
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label class="form-label">Name *</label>
+                    <input type="text" name="name" class="form-control" placeholder="Your full name" required>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label">Email *</label>
+                    <input type="email" name="email" class="form-control" placeholder="your@email.com" required>
+                  </div>
+                  <div class="col-12">
+                    <label class="form-label">Subject</label>
+                    <input type="text" name="subject" class="form-control"
+                      placeholder="Project inquiry, collaboration, etc.">
+                  </div>
+                  <div class="col-12">
+                    <label class="form-label">Message *</label>
+                    <textarea name="message" class="form-control" rows="4"
+                      placeholder="Tell me about your project, requirements, timeline, and budget..."
+                      required></textarea>
+                  </div>
+                  <div class="col-12">
+                    <button type="submit" class="btn btn-send">
+                      <i class="bi bi-send me-1"></i> Send Message
+                    </button>
+                  </div>
                 </div>
               </form>
             </div>
+
           </div>
         </div>
+      </div>
+    </section>
 
-        <script>
-          function confirmSubmit() { }
-        </script>
+    <!-- Scroll to Top Button -->
+<button id="scrollTop" class="scroll-top">↑</button>
+
+<script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  // ==========================
+  // 1. Animate elements on load
+  // ==========================
+  const animated = document.querySelectorAll(".animate");
+  animated.forEach((el, index) => {
+    setTimeout(() => {
+      el.classList.add("show");
+    }, index * 200);
+  });
+
+  // ==========================
+  // 2. Typed.js effect
+  // ==========================
+  new Typed("#typed-text", {
+    strings: ["Full Stack Developer", "Frontend Designer", "Backend Engineer"],
+    typeSpeed: 60,
+    backSpeed: 40,
+    loop: true,
+    smartBackspace: true,
+    showCursor: true,
+    cursorChar: '|'
+  });
+
+  // ==========================
+  // 3. Navbar ScrollSpy
+  // ==========================
+  const navbar = document.querySelector(".main-navbar");
+  const sections = document.querySelectorAll("section[id]");
+  const links = document.querySelectorAll(".main-navbar .nav-link");
+
+  window.addEventListener("scroll", () => {
+    const scrollY = window.scrollY;
+
+    // Highlight active section
+    sections.forEach((section) => {
+      const sectionTop = section.offsetTop - 150;
+      const sectionHeight = section.offsetHeight;
+      if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
+        links.forEach(link => link.classList.remove("active"));
+        links.forEach(link => {
+          if (link.getAttribute("href").includes(section.id)) {
+            link.classList.add("active");
+          }
+        });
+      }
+    });
+
+    // Show Scroll to Top Button
+    if (scrollY > 300) {
+      scrollTopBtn.style.display = 'block';
+    } else {
+      scrollTopBtn.style.display = 'none';
+    }
+  });
+
+  // ==========================
+  // 4. Scroll to Top Button
+  // ==========================
+  const scrollTopBtn = document.getElementById('scrollTop');
+  scrollTopBtn.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  // ==========================
+  // 5. Testimonial Form
+  // ==========================
+  const testimonialForm = document.getElementById('testimonialForm');
+  if (testimonialForm) {
+    testimonialForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      alert("Thank you for your feedback!");
+      const modal = bootstrap.Modal.getInstance(document.getElementById('testimonialModal'));
+      modal.hide();
+      this.reset();
+    });
+  }
+});
+</script>
+
+<style>
+/* Scroll to Top Button */
+.scroll-top {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: none;
+  background: #000;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 20px;
+  z-index: 999;
+  transition: background 0.3s ease;
+}
+.scroll-top:hover {
+  background: #444;
+}
+
+/* Animate show class example */
+.animate {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s ease;
+}
+.animate.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+</style>
 
 
 
-
-
+    <!-- Footer -->
+    <footer class="footer mt-5 py-5 bg-light">
+      <div class="container">
         <div class="row">
-          <!-- Testimonial 1 -->
-          <div class="col-md-4">
-            <div class="testimonial-card p-4 bg-white rounded-4 shadow-sm mb-4">
-              <div class="d-flex align-items-center mb-3">
-                <div class="initials-circle me-3">SJ</div>
-                <div>
-                  <strong>Sarah Johnson</strong><br>
-                  <small class="text-muted">Marketing Director<br>Tech Solutions Inc</small>
-                </div>
-              </div>
-              <div class="mb-2 text-warning">★★★★★</div>
-              <p class="text-muted">Hizkia delivered an outstanding website that exceeded our expectations. Her
-                attention to detail and creative approach made our brand stand out.</p>
-              <div class="d-flex justify-content-between">
-                <span class="tag">Corporate Website</span>
-                <span class="date">🗓️ March 2024</span>
-              </div>
+          <!-- Portfolio Info -->
+          <div class="col-md-3 mb-4">
+            <h5 class="fw-bold">Portfolio</h5>
+            <p class="text-muted">Passionate developer creating innovative solutions and beautiful experiences. Let’s
+              build something amazing together.</p>
+            <div class="d-flex gap-3 fs-5">
+              <i class="bi bi-cup-hot"></i>
+              <i class="bi bi-linkedin"></i>
+              <i class="bi bi-twitter"></i>
+              <i class="bi bi-instagram"></i>
             </div>
           </div>
 
-          <!-- Testimonial 2 -->
-          <div class="col-md-4">
-            <div class="testimonial-card p-4 bg-white rounded-4 shadow-sm mb-4">
-              <div class="d-flex align-items-center mb-3">
-                <div class="initials-circle me-3">MC</div>
-                <div>
-                  <strong>Michael Chen</strong><br>
-                  <small class="text-muted">Startup Founder<br>InnovateLab</small>
-                </div>
-              </div>
-              <div class="mb-2 text-warning">★★★★★</div>
-              <p class="text-muted">Working with Hizkia was a game-changer for our startup. She created a modern,
-                responsive web application that our users love.</p>
-              <div class="d-flex justify-content-between">
-                <span class="tag">Web Application</span>
-                <span class="date">🗓️ February 2024</span>
-              </div>
-            </div>
+          <!-- Quick Links -->
+          <div class="col-md-3 mb-4">
+            <h5 class="fw-bold">Quick Links</h5>
+            <ul class="list-unstyled text-muted">
+              <li><i class="bi bi-house-door me-2"></i>Home</li>
+              <li><i class="bi bi-person me-2"></i>About</li>
+              <li><i class="bi bi-briefcase me-2"></i>Experience</li>
+              <li><i class="bi bi-folder2-open me-2"></i>Projects</li>
+              <li><i class="bi bi-code-slash me-2"></i>Skills</li>
+              <li><i class="bi bi-chat-left-text me-2"></i>Testimonials</li>
+              <li><i class="bi bi-envelope me-2"></i>Contact</li>
+            </ul>
           </div>
 
-          <!-- Testimonial 3 -->
-          <div class="col-md-4">
-            <div class="testimonial-card p-4 bg-white rounded-4 shadow-sm mb-4">
-              <div class="d-flex align-items-center mb-3">
-                <div class="initials-circle me-3">LR</div>
-                <div>
-                  <strong>Lisa Rodriguez</strong><br>
-                  <small class="text-muted">E-commerce Manager<br>Fashion Hub</small>
-                </div>
-              </div>
-              <div class="mb-2 text-warning">★★★★★</div>
-              <p class="text-muted">Hizkia transformed our online store with a beautiful, user-friendly design. Sales
-                increased by 40% after the redesign. Amazing work!</p>
-              <div class="d-flex justify-content-between">
-                <span class="tag">E-commerce Platform</span>
-                <span class="date">🗓️ January 2024</span>
-              </div>
-            </div>
+          <!-- Get In Touch -->
+          <div class="col-md-3 mb-4">
+            <h5 class="fw-bold">Get In Touch</h5>
+            <p class="text-muted mb-1"><i class="bi bi-envelope me-2"></i>abdallahelsayed192@gmail.com</p>
+            <p class="text-muted mb-3"><i class="bi bi-chat-dots me-2"></i>Available for freelance work</p>
+            <button class="btn btn-dark btn-sm" data-bs-toggle="modal" data-bs-target="#contactModal">
+              Let’s Work Together <i class="bi bi-envelope-paper ms-1"></i>
+            </button>
+          </div>
+
+          <!-- Stay Updated -->
+          <div class="col-md-3 mb-4">
+            <h5 class="fw-bold">Stay Updated</h5>
+            <p class="text-muted">Subscribe to get notified about my latest projects and articles.</p>
+            <button class="btn btn-dark btn-sm" data-bs-toggle="modal" data-bs-target="#subscribeModal">
+              Subscribe Now <i class="bi bi-send ms-1"></i>
+            </button>
+
           </div>
         </div>
-        </div>
-      </section>
+        <!-- Modal -->
+        <div class="modal fade" id="subscribeModal" tabindex="-1" aria-labelledby="subscribeModalLabel"
+          aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" style="max-width: 400px;">
+            <div class="modal-content p-4 rounded-4 shadow-sm">
 
-      <!-- Get In Touch Section -->
-      <section id="contact">
-        <div class="container py-5">
-          <h2 class="section-title">Get In Touch</h2>
-          <p class="section-subtitle">Ready to bring your ideas to life? Let’s discuss your next project and create
-            something amazing together</p>
+              <!-- Close button -->
+              <div class="d-flex justify-content-end">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
 
-          <div class="row g-4">
-            <!-- Left Side -->
-            <div class="col-lg-6">
-              <h5><i class="bi bi-chat-left-text me-2"></i>Connect With Me</h5>
-              <p>Follow me on social media to stay updated with my latest projects, tech insights, and development
-                journey.</p>
+              <!-- Title -->
+              <div class="text-start">
+                <h5 class="fw-bold mb-2"><i class="bi bi-envelope me-1"></i> Subscribe to Newsletter</h5>
+                <p class="text-muted small">Get the latest updates on my projects, articles, and tech insights
+                  delivered to your inbox.</p>
+              </div>
 
-              <!-- LinkedIn -->
-              <div class="contact-card mb-3 d-flex align-items-start">
-                <i class="bi bi-linkedin contact-icon"></i>
-                <div>
-                  <div class="social-label">
-                    LinkedIn
-                    <a href="https://www.linkedin.com/in/abdallah-mohamed-9487861a1/" target="_blank"
-                      class="social-handle d-inline-block ms-1 text-decoration-none">@abdallah.mohamed</a>
-                  </div>
-                  <div>Connect with me professionally and see my career journey</div>
+              <!-- Email input -->
+              <div class="mb-3">
+                <label for="email" class="form-label fw-semibold">Email Address</label>
+                <div class="input-group">
+                  <span class="input-group-text bg-light border-0"><i class="bi bi-envelope"></i></span>
+                  <input type="email" class="form-control" id="email" placeholder="Enter your email">
                 </div>
               </div>
 
-              <!-- GitHub -->
-              <div class="contact-card mb-3 d-flex align-items-start">
-                <i class="bi bi-github contact-icon"></i>
-                <div>
-                  <div class="social-label">
-                    GitHub
-                    <a href="https://github.com/ABBOUD2004" target="_blank"
-                      class="social-handle d-inline-block ms-1 text-decoration-none">@ABBOUD2004</a>
-                  </div>
-                  <div>Check out my latest projects and open source contributions</div>
-                </div>
+              <!-- Features -->
+              <div class="bg-light rounded-3 p-3 mb-3">
+                <p class="mb-2"><i class="bi bi-envelope-fill me-2"></i> Weekly project updates</p>
+                <p class="mb-2"><i class="bi bi-rocket-takeoff me-2"></i> New article notifications</p>
+                <p class="mb-0"><i class="bi bi-lightbulb me-2"></i> Tech tips and insights</p>
               </div>
 
-              <!-- Twitter -->
-              <div class="contact-card mb-3 d-flex align-items-start">
-                <i class="bi bi-twitter contact-icon"></i>
-                <div>
-                  <div class="social-label">
-                    Twitter
-                    <a href="#" target="_blank"
-                      class="social-handle d-inline-block ms-1 text-decoration-none">@abdallah_elsayed</a>
-                  </div>
-                  <div>Follow me for tech insights and development tips</div>
-                </div>
-              </div>
-
-              <!-- Instagram -->
-              <div class="contact-card mb-3 d-flex align-items-start">
-                <i class="bi bi-instagram contact-icon"></i>
-                <div>
-                  <div class="social-label">
-                    Instagram
-                    <a href="https://www.instagram.com/abdallah.elsayed.1612/" target="_blank"
-                      class="social-handle d-inline-block ms-1 text-decoration-none">@abdallah.elsayed.1612</a>
-                  </div>
-                  <div>Behind the scenes of my development journey</div>
-                </div>
-              </div>
-
-              <!-- Facebook -->
-              <div class="contact-card d-flex align-items-start">
-                <i class="bi bi-facebook contact-icon"></i>
-                <div>
-                  <div class="social-label">
-                    Facebook
-                    <a href="https://www.facebook.com/abdallah.elsayed.1612?locale=ar_AR" target="_blank"
-                      class="social-handle d-inline-block ms-1 text-decoration-none">@abdallah.elsayed.1612</a>
-                  </div>
-                  <div>Follow my personal updates and activities</div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Right Side -->
-            <div class="col-lg-6">
-              <h5><i class="bi bi-envelope-paper me-2"></i>Contact Form</h5>
-              <p>Have a project in mind? Send me a message and I’ll get back to you as soon as possible.</p>
-
-              <div class="form-section">
-                <form action="contact.php" method="POST">
-                  <div class="row g-3">
-                    <div class="col-md-6">
-                      <label class="form-label">Name *</label>
-                      <input type="text" name="name" class="form-control" placeholder="Your full name" required>
-                    </div>
-                    <div class="col-md-6">
-                      <label class="form-label">Email *</label>
-                      <input type="email" name="email" class="form-control" placeholder="your@email.com" required>
-                    </div>
-                    <div class="col-12">
-                      <label class="form-label">Subject</label>
-                      <input type="text" name="subject" class="form-control"
-                        placeholder="Project inquiry, collaboration, etc.">
-                    </div>
-                    <div class="col-12">
-                      <label class="form-label">Message *</label>
-                      <textarea name="message" class="form-control" rows="4"
-                        placeholder="Tell me about your project, requirements, timeline, and budget..."
-                        required></textarea>
-                    </div>
-                    <div class="col-12">
-                      <button type="submit" class="btn btn-send">
-                        <i class="bi bi-send me-1"></i> Send Message
-                      </button>
-                    </div>
-                  </div>
-                </form>
-              </div>
-
-            </div>
-          </div>
-        </div>
-      </section>
-
-
-      <!-- Footer -->
-      <footer class="footer mt-5 py-5 bg-light">
-        <div class="container">
-          <div class="row">
-            <!-- Portfolio Info -->
-            <div class="col-md-3 mb-4">
-              <h5 class="fw-bold">Portfolio</h5>
-              <p class="text-muted">Passionate developer creating innovative solutions and beautiful experiences. Let’s
-                build something amazing together.</p>
-              <div class="d-flex gap-3 fs-5">
-                <i class="bi bi-cup-hot"></i>
-                <i class="bi bi-linkedin"></i>
-                <i class="bi bi-twitter"></i>
-                <i class="bi bi-instagram"></i>
-              </div>
-            </div>
-
-            <!-- Quick Links -->
-            <div class="col-md-3 mb-4">
-              <h5 class="fw-bold">Quick Links</h5>
-              <ul class="list-unstyled text-muted">
-                <li><i class="bi bi-house-door me-2"></i>Home</li>
-                <li><i class="bi bi-person me-2"></i>About</li>
-                <li><i class="bi bi-briefcase me-2"></i>Experience</li>
-                <li><i class="bi bi-folder2-open me-2"></i>Projects</li>
-                <li><i class="bi bi-code-slash me-2"></i>Skills</li>
-                <li><i class="bi bi-chat-left-text me-2"></i>Testimonials</li>
-                <li><i class="bi bi-envelope me-2"></i>Contact</li>
-              </ul>
-            </div>
-
-            <!-- Get In Touch -->
-            <div class="col-md-3 mb-4">
-              <h5 class="fw-bold">Get In Touch</h5>
-              <p class="text-muted mb-1"><i class="bi bi-envelope me-2"></i>abdallahelsayed192@gmail.com</p>
-              <p class="text-muted mb-3"><i class="bi bi-chat-dots me-2"></i>Available for freelance work</p>
-              <button class="btn btn-dark btn-sm" data-bs-toggle="modal" data-bs-target="#contactModal">
-                Let’s Work Together <i class="bi bi-envelope-paper ms-1"></i>
+              <!-- Subscribe button -->
+              <button class="btn btn-dark w-100 py-2 rounded d-flex align-items-center justify-content-center gap-2">
+                <i class="bi bi-send"></i> Subscribe
               </button>
             </div>
-
-            <!-- Stay Updated -->
-            <div class="col-md-3 mb-4">
-              <h5 class="fw-bold">Stay Updated</h5>
-              <p class="text-muted">Subscribe to get notified about my latest projects and articles.</p>
-              <button class="btn btn-dark btn-sm" data-bs-toggle="modal" data-bs-target="#subscribeModal">
-                Subscribe Now <i class="bi bi-send ms-1"></i>
-              </button>
-
-            </div>
-          </div>
-          <!-- Modal -->
-          <div class="modal fade" id="subscribeModal" tabindex="-1" aria-labelledby="subscribeModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" style="max-width: 400px;">
-              <div class="modal-content p-4 rounded-4 shadow-sm">
-
-                <!-- Close button -->
-                <div class="d-flex justify-content-end">
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-
-                <!-- Title -->
-                <div class="text-start">
-                  <h5 class="fw-bold mb-2"><i class="bi bi-envelope me-1"></i> Subscribe to Newsletter</h5>
-                  <p class="text-muted small">Get the latest updates on my projects, articles, and tech insights
-                    delivered to your inbox.</p>
-                </div>
-
-                <!-- Email input -->
-                <div class="mb-3">
-                  <label for="email" class="form-label fw-semibold">Email Address</label>
-                  <div class="input-group">
-                    <span class="input-group-text bg-light border-0"><i class="bi bi-envelope"></i></span>
-                    <input type="email" class="form-control" id="email" placeholder="Enter your email">
-                  </div>
-                </div>
-
-                <!-- Features -->
-                <div class="bg-light rounded-3 p-3 mb-3">
-                  <p class="mb-2"><i class="bi bi-envelope-fill me-2"></i> Weekly project updates</p>
-                  <p class="mb-2"><i class="bi bi-rocket-takeoff me-2"></i> New article notifications</p>
-                  <p class="mb-0"><i class="bi bi-lightbulb me-2"></i> Tech tips and insights</p>
-                </div>
-
-                <!-- Subscribe button -->
-                <button class="btn btn-dark w-100 py-2 rounded d-flex align-items-center justify-content-center gap-2">
-                  <i class="bi bi-send"></i> Subscribe
-                </button>
-              </div>
-            </div>
-          </div>
-
-
-          <hr />
-          <div class="d-flex flex-column flex-md-row justify-content-between text-muted small mt-3">
-            <div>© 2025 Portfolio. Made with <i class="bi bi-heart-fill text-danger mx-1"></i> abdallah mohamed</div>
-            <div><i class="bi bi-calendar2-week me-1"></i> 2025</div>
           </div>
         </div>
-      </footer>
 
-      <!-- Scripts -->
-      <script src="./index.js"></script>
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
-      <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
 
-    </body>
+        <hr />
+        <div class="d-flex flex-column flex-md-row justify-content-between text-muted small mt-3">
+          <div>© 2025 Portfolio. Made with <i class="bi bi-heart-fill text-danger mx-1"></i> abdallah mohamed</div>
+          <div><i class="bi bi-calendar2-week me-1"></i> 2025</div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="./index.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+
+  </body>
 
   </html>
