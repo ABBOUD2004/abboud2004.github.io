@@ -141,7 +141,7 @@
         <img src="./Screenshot 2024-07-11 043546.png" class="rounded-4 img-fluid shadow" alt="Profile Image">
       </div>
     </div>
-  </section >
+  </section>
 
   <!-- Contact Modal -->
   <div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
@@ -305,18 +305,23 @@
 
               <!-- أزرار الاتصال -->
               <div class="mt-4 d-flex gap-2 flex-wrap">
-                <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#cvModal">
+                <!-- زر تحميل السيرة الذاتية مباشرة -->
+                <a href="https://drive.google.com/uc?export=download&id=1iYfZLGDgAwCYvapiesTbdtmPdykQjWPX"
+                  target="_blank" class="btn btn-dark">
                   <i class="fas fa-download"></i> Download My CV
-                </button>
+                </a>
 
+                <!-- زر التواصل -->
                 <a href="#" class="btn btn-outline-dark d-flex align-items-center gap-2" data-bs-toggle="modal"
                   data-bs-target="#contactModal">
-                  <i class="bi bi-send-fill"></i>Here Me Now
+                  <i class="bi bi-send-fill"></i> Hire Me Now
                 </a>
               </div>
+
             </div>
           </div>
         </div>
+      </div>
       </div>
     </section>
 
@@ -415,7 +420,7 @@
         </p>
 
 
-        <ul class="nav nav-pills justify-content-center mb-4 bg-light rounded-pill px-2 py-1" id="experienceTabs"
+        <ul class="nav justify-content-center mb-4 bg-light rounded-pill px-2 py-1" id="experienceTabs"
           role="tablist">
           <li class="nav-item" role="presentation">
             <button class="nav-link active px-4 py-2 rounded-pill" id="work-tab" data-bs-toggle="pill"
@@ -731,10 +736,10 @@
             projects</p>
 
           <!-- Nav Pills -->
-          <ul class="nav nav-pills justify-content-center mb-4 bg-light rounded-pill px-2 py-1" id="projectTabs"
+          <ul class="nav justify-content-center mb-4 bg-light rounded-pill px-2 py-1" id="projectTabs"
             role="tablist">
             <li class="nav-item" role="presentation">
-              <button class="nav-link px-4 py-2 rounded-pill" id="web-tab" data-bs-toggle="pill" data-bs-target="#web"
+              <button class="nav-link active px-4 py-2 rounded-pill" id="web-tab" data-bs-toggle="pill" data-bs-target="#web"
                 type="button" role="tab">
                 <i class="bi bi-globe2 me-1"></i> Web Projects
               </button>
@@ -746,7 +751,7 @@
               </button>
             </li>
             <li class="nav-item" role="presentation">
-              <button class="nav-link active px-4 py-2 rounded-pill" id="open-tab" data-bs-toggle="pill"
+              <button class="nav-link  px-4 py-2 rounded-pill" id="open-tab" data-bs-toggle="pill"
                 data-bs-target="#open" type="button" role="tab">
                 <i class="bi bi-code-slash me-1"></i> Open Source
               </button>
@@ -914,7 +919,7 @@
         </p>
 
         <!-- Tabs -->
-        <ul class="nav nav-pills justify-content-center mb-4 bg-light rounded-pill px-2 py-1" id="skillsTabs"
+        <ul class="nav justify-content-center mb-4 bg-light rounded-pill px-2 py-1" id="skillsTabs"
           role="tablist">
           <li class="nav-item" role="presentation">
             <button class="nav-link active px-4 py-2 rounded-pill" id="prog-tab" data-bs-toggle="pill"
@@ -1371,122 +1376,124 @@
     </section>
 
     <!-- Scroll to Top Button -->
-<button id="scrollTop" class="scroll-top">↑</button>
+    <button id="scrollTop" class="scroll-top">↑</button>
 
-<script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  // ==========================
-  // 1. Animate elements on load
-  // ==========================
-  const animated = document.querySelectorAll(".animate");
-  animated.forEach((el, index) => {
-    setTimeout(() => {
-      el.classList.add("show");
-    }, index * 200);
-  });
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        // ==========================
+        // 1. Animate elements on load
+        // ==========================
+        const animated = document.querySelectorAll(".animate");
+        animated.forEach((el, index) => {
+          setTimeout(() => {
+            el.classList.add("show");
+          }, index * 200);
+        });
 
-  // ==========================
-  // 2. Typed.js effect
-  // ==========================
-  new Typed("#typed-text", {
-    strings: ["Full Stack Developer", "Frontend Designer", "Backend Engineer"],
-    typeSpeed: 60,
-    backSpeed: 40,
-    loop: true,
-    smartBackspace: true,
-    showCursor: true,
-    cursorChar: '|'
-  });
+        // ==========================
+        // 2. Typed.js effect
+        // ==========================
+        new Typed("#typed-text", {
+          strings: ["Full Stack Developer", "Frontend Designer", "Backend Engineer"],
+          typeSpeed: 60,
+          backSpeed: 40,
+          loop: true,
+          smartBackspace: true,
+          showCursor: true,
+          cursorChar: '|'
+        });
 
-  // ==========================
-  // 3. Navbar ScrollSpy
-  // ==========================
-  const navbar = document.querySelector(".main-navbar");
-  const sections = document.querySelectorAll("section[id]");
-  const links = document.querySelectorAll(".main-navbar .nav-link");
+        // ==========================
+        // 3. Navbar ScrollSpy
+        // ==========================
+        const navbar = document.querySelector(".main-navbar");
+        const sections = document.querySelectorAll("section[id]");
+        const links = document.querySelectorAll(".main-navbar .nav-link");
 
-  window.addEventListener("scroll", () => {
-    const scrollY = window.scrollY;
+        window.addEventListener("scroll", () => {
+          const scrollY = window.scrollY;
 
-    // Highlight active section
-    sections.forEach((section) => {
-      const sectionTop = section.offsetTop - 150;
-      const sectionHeight = section.offsetHeight;
-      if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
-        links.forEach(link => link.classList.remove("active"));
-        links.forEach(link => {
-          if (link.getAttribute("href").includes(section.id)) {
-            link.classList.add("active");
+          // Highlight active section
+          sections.forEach((section) => {
+            const sectionTop = section.offsetTop - 150;
+            const sectionHeight = section.offsetHeight;
+            if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
+              links.forEach(link => link.classList.remove("active"));
+              links.forEach(link => {
+                if (link.getAttribute("href").includes(section.id)) {
+                  link.classList.add("active");
+                }
+              });
+            }
+          });
+
+          // Show Scroll to Top Button
+          if (scrollY > 300) {
+            scrollTopBtn.style.display = 'block';
+          } else {
+            scrollTopBtn.style.display = 'none';
           }
         });
+
+        // ==========================
+        // 4. Scroll to Top Button
+        // ==========================
+        const scrollTopBtn = document.getElementById('scrollTop');
+        scrollTopBtn.addEventListener('click', () => {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // ==========================
+        // 5. Testimonial Form
+        // ==========================
+        const testimonialForm = document.getElementById('testimonialForm');
+        if (testimonialForm) {
+          testimonialForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            alert("Thank you for your feedback!");
+            const modal = bootstrap.Modal.getInstance(document.getElementById('testimonialModal'));
+            modal.hide();
+            this.reset();
+          });
+        }
+      });
+    </script>
+
+    <style>
+      /* Scroll to Top Button */
+      .scroll-top {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        display: none;
+        background: #000;
+        color: #fff;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 20px;
+        z-index: 999;
+        transition: background 0.3s ease;
       }
-    });
 
-    // Show Scroll to Top Button
-    if (scrollY > 300) {
-      scrollTopBtn.style.display = 'block';
-    } else {
-      scrollTopBtn.style.display = 'none';
-    }
-  });
+      .scroll-top:hover {
+        background: #444;
+      }
 
-  // ==========================
-  // 4. Scroll to Top Button
-  // ==========================
-  const scrollTopBtn = document.getElementById('scrollTop');
-  scrollTopBtn.addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
+      /* Animate show class example */
+      .animate {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.6s ease;
+      }
 
-  // ==========================
-  // 5. Testimonial Form
-  // ==========================
-  const testimonialForm = document.getElementById('testimonialForm');
-  if (testimonialForm) {
-    testimonialForm.addEventListener('submit', function (e) {
-      e.preventDefault();
-      alert("Thank you for your feedback!");
-      const modal = bootstrap.Modal.getInstance(document.getElementById('testimonialModal'));
-      modal.hide();
-      this.reset();
-    });
-  }
-});
-</script>
-
-<style>
-/* Scroll to Top Button */
-.scroll-top {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  display: none;
-  background: #000;
-  color: #fff;
-  border: none;
-  padding: 10px 15px;
-  border-radius: 50%;
-  cursor: pointer;
-  font-size: 20px;
-  z-index: 999;
-  transition: background 0.3s ease;
-}
-.scroll-top:hover {
-  background: #444;
-}
-
-/* Animate show class example */
-.animate {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: all 0.6s ease;
-}
-.animate.show {
-  opacity: 1;
-  transform: translateY(0);
-}
-</style>
+      .animate.show {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    </style>
 
 
 
