@@ -290,7 +290,7 @@
                 </div>
             </div>
 
-            <form id="booking-form" data-prevent-double-submit>
+            <form id="booking-form" action="{{ route('bookings.store') }}" method="POST" data-prevent-double-submit>
                 @csrf
                 <input type="hidden" name="room_id" id="booking-room-id">
                 <input type="hidden" name="facility_id" value="{{ $facility->id }}">
@@ -370,7 +370,7 @@
                         <div class="flex justify-between"><span class="text-gray-700 font-medium">Checkout:</span><span class="text-gray-900 font-semibold" id="b-display-checkout">-</span></div>
                         <div class="flex justify-between"><span class="text-gray-700 font-medium">Nights:</span><span class="text-gray-900 font-semibold" id="b-display-nights">-</span></div>
                         <div class="flex justify-between"><span class="text-gray-700 font-medium">Guests:</span><span class="text-gray-900 font-semibold" id="b-display-guests">-</span></div>
-                        <div class="flex justify-between pt-3 border-t-2 border-orange-300"><span class="text-gray-800 font-bold text-lg">Total:</span><span class="text-orange-600 font-bold text-2xl" id="b-display-total">-</span></div>
+                        <div class="flex justify-between pt-3 border-t-2 border-orange-300"><span class="text-gray-800 font-bold text-lg">Total:</span><span class="text-orange-600 font-bold text-2xl" id="b-display-total" aria-live="polite">-</span></div>
                     </div>
 
                     <button type="button" onclick="goToBookingStep(3)" class="mt-8 w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white py-4 rounded-xl font-bold text-lg hover:from-orange-600 hover:to-orange-700 transition-all transform hover:scale-105 shadow-lg">
@@ -400,7 +400,7 @@
                         </div>
                         <div>
                             <label for="b-phone" class="block text-sm font-semibold text-gray-700 mb-2">Phone Number</label>
-                            <input type="tel" name="guest_phone" id="b-phone" required placeholder="+250 xxx xxx xxx" class="w-full border-2 border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:border-orange-500 transition">
+                            <input type="tel" name="guest_phone" id="b-phone" required placeholder="+250 xxx xxx xxx" class="w-full border-2 border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:border-orange-500 transition" inputmode="tel" autocomplete="tel" pattern="^\+?[0-9\s\-]{7,15}$">
                         </div>
                         <div class="md:col-span-2">
                             <label class="flex items-center gap-2 cursor-pointer">
@@ -431,7 +431,7 @@
                                 <div class="text-3xl font-bold text-yellow-500">MTN</div>
                             </div>
                             <p class="text-sm text-gray-600 mb-2">Enter your MTN Mobile number:</p>
-                            <input type="tel" name="mtn_number" id="b-mtn-number" placeholder="078 xxx xxxx" class="w-full border-2 border-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:border-orange-500">
+                            <input type="tel" name="mtn_number" id="b-mtn-number" placeholder="078 xxx xxxx" class="w-full border-2 border-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:border-orange-500" inputmode="numeric" autocomplete="tel" pattern="^0\d{9}$" maxlength="10" disabled>
                         </div>
 
                         <div class="payment-option border-2 border-gray-200 rounded-xl p-6 cursor-pointer hover:border-orange-500 transition" onclick="selectPayment('visa', this)">
@@ -591,6 +591,10 @@
         const form = document.getElementById('booking-form');
         form.reset();
         document.getElementById('booking-room-id').value = roomId;
+        // Reset payment method and MTN field state
+        document.querySelectorAll('input[name="payment_method"]').forEach(r => { r.checked = false; });
+        const mtnField = document.getElementById('b-mtn-number');
+        if (mtnField) { mtnField.disabled = true; mtnField.required = false; mtnField.value = ''; }
 
         // Reset steps
         currentBookingStep = 1;
@@ -738,6 +742,14 @@
         if (el) el.classList.add('selected');
         const radio = document.getElementById(`payment-${method}`);
         if (radio) radio.checked = true;
+        // Toggle MTN input enablement/requirement
+        const mtnInput = document.getElementById('b-mtn-number');
+        if (mtnInput) {
+            const isMtn = method === 'mtn';
+            mtnInput.disabled = !isMtn;
+            mtnInput.required = isMtn;
+            if (!isMtn) mtnInput.value = '';
+        }
     }
 
     // Form Submission (AJAX)
