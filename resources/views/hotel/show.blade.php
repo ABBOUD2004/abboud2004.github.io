@@ -5,6 +5,7 @@
 
 <!-- Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&family=Inter:wght@400;700&family=Signika+SC&family=Sedan+SC&family=Spinnaker&family=Sora&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" referrerpolicy="no-referrer" />
 
 <style>
     /* Smooth, accessible modal visuals */
@@ -36,12 +37,35 @@
     .category-tab { transition: all 0.2s ease; cursor: pointer; }
     .category-tab.active { background: linear-gradient(135deg, #F97316, #FB923C); color: white; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(249, 115, 22, 0.35); }
 
+    /* New rooms navbar styles */
+    .match-orange { background: linear-gradient(135deg, #FFF7ED, #FFE8D3); border: 2px solid #FDBA74; }
+    .category-btn { background: #fff; color: #374151; border: 2px solid #E5E7EB; transition: all 0.2s ease; }
+    .category-btn:hover { border-color: #F97316; box-shadow: 0 6px 14px rgba(249, 115, 22, 0.18); transform: translateY(-2px); }
+    .category-btn.active { background: linear-gradient(135deg, #F97316, #FB923C); color: #fff; border-color: transparent; box-shadow: 0 8px 18px rgba(249, 115, 22, 0.35); }
+
     .alert-toast { position: fixed; top: 20px; right: 20px; z-index: 9999; min-width: 300px; animation: slideInRight 0.25s ease; }
     @keyframes slideInRight { from { transform: translateX(400px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 </style>
 
 <div class="bg-gradient-to-b from-gray-100 to-gray-200 min-h-screen font-[Inter] text-black">
     <div class="w-full bg-white min-h-screen">
+
+        <!-- Transaction Banner (persists across refresh via localStorage) -->
+        <div id="transaction-banner" class="hidden bg-gradient-to-r from-amber-50 to-orange-50 border-l-4 border-orange-500 p-4 mx-4 sm:mx-6 lg:mx-8 mt-4 rounded-xl shadow-sm">
+            <div class="flex items-start justify-between gap-3">
+                <div class="flex items-center gap-3">
+                    <i class="fas fa-receipt text-orange-600" aria-hidden="true"></i>
+                    <div>
+                        <p class="text-sm text-gray-700">Last transaction <span id="txn-banner-status" class="font-semibold text-gray-900">-</span></p>
+                        <p class="text-xs text-gray-600">Ref: <span id="txn-banner-ref" class="font-mono">-</span> • <span id="txn-banner-method">-</span> • <span id="txn-banner-total">-</span></p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button type="button" onclick="viewStoredBooking()" class="text-sm font-semibold text-orange-600 hover:underline">View details</button>
+                    <button type="button" onclick="clearStoredBooking()" class="text-sm text-gray-500 hover:text-gray-700" aria-label="Dismiss">✕</button>
+                </div>
+            </div>
+        </div>
 
         <!-- Hero Image -->
         <section class="relative w-full px-4 sm:px-6 lg:px-8 pt-6">
@@ -129,12 +153,28 @@
             <div class="max-w-5xl mx-auto">
                 <h2 class="text-xl sm:text-2xl md:text-3xl font-bold mb-6 text-gray-800">Our Rooms</h2>
 
-                <!-- Category Tabs -->
-                <div class="flex flex-wrap gap-3 mb-8 bg-gray-100 p-4 rounded-2xl">
-                    <button type="button" onclick="filterRooms('all')" class="category-tab active px-6 py-3 rounded-xl font-bold text-sm transition-all">All Rooms</button>
-                    @php $categories = $facility->rooms->pluck('category')->unique()->filter(); @endphp
+                <!-- Rooms Navbar -->
+                @php
+                    $categories = $facility->rooms->pluck('category')->filter()->unique()->values();
+                    $roomCategoryIcons = [
+                        'VIP' => 'fa-crown',
+                        'Deluxe' => 'fa-gem',
+                        'Suite' => 'fa-hotel',
+                        'Executive' => 'fa-briefcase',
+                        'Standard' => 'fa-bed',
+                        'Economy' => 'fa-tags',
+                    ];
+                @endphp
+
+                <div class="match-orange rounded-xl p-4 mb-8 flex flex-wrap justify-center gap-3 shadow-lg">
+                    <button type="button" onclick="filterRooms('all')" class="category-btn active px-6 py-3 rounded-lg font-bold text-lg flex items-center gap-2 relative z-10">
+                        <i class="fas fa-th-large text-white/90"></i> All Rooms
+                    </button>
                     @foreach($categories as $category)
-                        <button type="button" onclick="filterRooms('{{ $category }}')" class="category-tab px-6 py-3 rounded-xl font-bold text-sm bg-white text-gray-700 hover:bg-orange-100 transition-all">{{ $category }}</button>
+                        @php $icon = $roomCategoryIcons[$category] ?? 'fa-bed'; @endphp
+                        <button type="button" onclick="filterRooms('{{ $category }}')" class="category-btn px-6 py-3 rounded-lg font-bold text-lg flex items-center gap-2 relative z-10">
+                            <i class="fas {{ $icon }} {{ strtolower($category) === 'vip' ? 'text-yellow-300' : 'text-orange-100' }}"></i> {{ $category }}
+                        </button>
                     @endforeach
                 </div>
 
@@ -290,7 +330,7 @@
                 </div>
             </div>
 
-            <form id="booking-form" data-prevent-double-submit>
+            <form id="booking-form" action="{{ route('bookings.store') }}" method="POST" data-prevent-double-submit>
                 @csrf
                 <input type="hidden" name="room_id" id="booking-room-id">
                 <input type="hidden" name="facility_id" value="{{ $facility->id }}">
@@ -370,7 +410,7 @@
                         <div class="flex justify-between"><span class="text-gray-700 font-medium">Checkout:</span><span class="text-gray-900 font-semibold" id="b-display-checkout">-</span></div>
                         <div class="flex justify-between"><span class="text-gray-700 font-medium">Nights:</span><span class="text-gray-900 font-semibold" id="b-display-nights">-</span></div>
                         <div class="flex justify-between"><span class="text-gray-700 font-medium">Guests:</span><span class="text-gray-900 font-semibold" id="b-display-guests">-</span></div>
-                        <div class="flex justify-between pt-3 border-t-2 border-orange-300"><span class="text-gray-800 font-bold text-lg">Total:</span><span class="text-orange-600 font-bold text-2xl" id="b-display-total">-</span></div>
+                        <div class="flex justify-between pt-3 border-t-2 border-orange-300"><span class="text-gray-800 font-bold text-lg">Total:</span><span class="text-orange-600 font-bold text-2xl" id="b-display-total" aria-live="polite">-</span></div>
                     </div>
 
                     <button type="button" onclick="goToBookingStep(3)" class="mt-8 w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white py-4 rounded-xl font-bold text-lg hover:from-orange-600 hover:to-orange-700 transition-all transform hover:scale-105 shadow-lg">
@@ -400,7 +440,7 @@
                         </div>
                         <div>
                             <label for="b-phone" class="block text-sm font-semibold text-gray-700 mb-2">Phone Number</label>
-                            <input type="tel" name="guest_phone" id="b-phone" required placeholder="+250 xxx xxx xxx" class="w-full border-2 border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:border-orange-500 transition">
+                            <input type="tel" name="guest_phone" id="b-phone" required placeholder="+250 xxx xxx xxx" class="w-full border-2 border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:border-orange-500 transition" inputmode="tel" autocomplete="tel" pattern="^\+?[0-9\s\-]{7,15}$">
                         </div>
                         <div class="md:col-span-2">
                             <label class="flex items-center gap-2 cursor-pointer">
@@ -431,7 +471,7 @@
                                 <div class="text-3xl font-bold text-yellow-500">MTN</div>
                             </div>
                             <p class="text-sm text-gray-600 mb-2">Enter your MTN Mobile number:</p>
-                            <input type="tel" name="mtn_number" id="b-mtn-number" placeholder="078 xxx xxxx" class="w-full border-2 border-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:border-orange-500">
+                            <input type="tel" name="mtn_number" id="b-mtn-number" placeholder="078 xxx xxxx" class="w-full border-2 border-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:border-orange-500" inputmode="numeric" autocomplete="tel" pattern="^0\d{9}$" maxlength="10" disabled>
                         </div>
 
                         <div class="payment-option border-2 border-gray-200 rounded-xl p-6 cursor-pointer hover:border-orange-500 transition" onclick="selectPayment('visa', this)">
@@ -446,6 +486,21 @@
                     <div class="mt-6 bg-gray-50 rounded-lg p-4">
                         <p class="text-sm text-gray-600 mb-2">📧 Invoice will be sent to: <span class="font-semibold" id="b-payment-email">-</span></p>
                         <p class="text-sm text-gray-600">💰 Total Amount: <span class="font-semibold" id="b-payment-total">-</span></p>
+                    </div>
+
+                    <!-- Transaction panel (appears during/after processing) -->
+                    <div id="b-transaction-panel" class="mt-6 bg-white border-2 border-gray-200 rounded-lg p-4 hidden">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <span id="b-txn-status-badge" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-700">Processing</span>
+                                <span class="text-sm text-gray-600">Payment method: <span id="b-txn-provider" class="font-semibold">-</span></span>
+                            </div>
+                            <div class="flex items-center gap-2" id="b-txn-spinner">
+                                <span class="loading-spinner"></span>
+                                <span class="text-sm text-gray-600">Awaiting confirmation...</span>
+                            </div>
+                        </div>
+                        <div class="mt-3 text-sm text-gray-600">Transaction Ref: <span id="b-txn-ref" class="font-semibold">-</span></div>
                     </div>
 
                     <button type="submit" id="confirm-booking-btn" class="mt-8 w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white py-4 rounded-xl font-bold text-lg hover:from-orange-600 hover:to-orange-700 transition-all transform hover:scale-105 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed" data-prevent-double-click>
@@ -477,6 +532,9 @@
                                 <div class="flex justify-between"><span class="text-gray-600">Check-in:</span><span class="font-semibold" id="b-confirm-checkin">-</span></div>
                                 <div class="flex justify-between"><span class="text-gray-600">Checkout:</span><span class="font-semibold" id="b-confirm-checkout">-</span></div>
                                 <div class="flex justify-between"><span class="text-gray-600">Guests:</span><span class="font-semibold" id="b-confirm-guests">-</span></div>
+                                <div class="flex justify-between"><span class="text-gray-600">Payment Method:</span><span class="font-semibold" id="b-confirm-payment-method">-</span></div>
+                                <div class="flex justify-between"><span class="text-gray-600">Payment Status:</span><span class="font-semibold" id="b-confirm-payment-status">-</span></div>
+                                <div class="flex justify-between"><span class="text-gray-600">Transaction Ref:</span><span class="font-semibold" id="b-confirm-txn-ref">-</span></div>
                                 <div class="flex justify-between pt-3 border-t-2 border-gray-300"><span class="text-gray-800 font-bold">Total Paid:</span><span class="font-bold text-orange-600" id="b-confirm-total">-</span></div>
                             </div>
                         </div>
@@ -540,12 +598,12 @@
     // Room Category Filter
     function filterRooms(category) {
         const rooms = document.querySelectorAll('.room-card');
-        const tabs = document.querySelectorAll('.category-tab');
-        tabs.forEach(tab => {
-            tab.classList.remove('active');
-            if (tab.textContent.trim() === category || (category === 'all' && tab.textContent.includes('All'))) {
-                tab.classList.add('active');
-            }
+        const tabs = document.querySelectorAll('.category-btn');
+        tabs.forEach(btn => {
+            btn.classList.remove('active');
+            const isAll = category === 'all' && btn.textContent.trim().toLowerCase().includes('all rooms');
+            const isMatch = btn.textContent.trim() === category;
+            if (isAll || isMatch) btn.classList.add('active');
         });
         rooms.forEach(room => {
             if (category === 'all' || room.dataset.category === category) {
@@ -591,6 +649,10 @@
         const form = document.getElementById('booking-form');
         form.reset();
         document.getElementById('booking-room-id').value = roomId;
+        // Reset payment method and MTN field state
+        document.querySelectorAll('input[name="payment_method"]').forEach(r => { r.checked = false; });
+        const mtnField = document.getElementById('b-mtn-number');
+        if (mtnField) { mtnField.disabled = true; mtnField.required = false; mtnField.value = ''; }
 
         // Reset steps
         currentBookingStep = 1;
@@ -738,6 +800,17 @@
         if (el) el.classList.add('selected');
         const radio = document.getElementById(`payment-${method}`);
         if (radio) radio.checked = true;
+        // Toggle MTN input enablement/requirement
+        const mtnInput = document.getElementById('b-mtn-number');
+        if (mtnInput) {
+            const isMtn = method === 'mtn';
+            mtnInput.disabled = !isMtn;
+            mtnInput.required = isMtn;
+            if (!isMtn) mtnInput.value = '';
+        }
+        // Reflect provider in transaction panel (if shown)
+        const providerEl = document.getElementById('b-txn-provider');
+        if (providerEl) providerEl.textContent = method.toUpperCase();
     }
 
     // Form Submission (AJAX)
@@ -792,6 +865,18 @@
                 nights: parseInt(formData.get('nights'))
             };
 
+            // Show transaction panel as soon as we start
+            const txnPanel = document.getElementById('b-transaction-panel');
+            const txnBadge = document.getElementById('b-txn-status-badge');
+            const txnSpinner = document.getElementById('b-txn-spinner');
+            const txnProvider = document.getElementById('b-txn-provider');
+            const txnRefEl = document.getElementById('b-txn-ref');
+            if (txnPanel) txnPanel.classList.remove('hidden');
+            if (txnBadge) { txnBadge.textContent = 'Processing'; txnBadge.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-700'; }
+            if (txnSpinner) txnSpinner.classList.remove('hidden');
+            if (txnProvider) txnProvider.textContent = (paymentMethod.value || '-').toUpperCase();
+            if (txnRefEl) txnRefEl.textContent = '-';
+
             try {
                 const response = await fetch(BOOKINGS_STORE_URL, {
                     method: 'POST',
@@ -816,6 +901,12 @@
                 }
 
                 if (response.ok && result.success) {
+                    // Update transaction panel with success and reference
+                    const ref = result.transaction_reference || result.payment_reference || result.booking_reference || ('BK-' + Date.now());
+                    if (txnBadge) { txnBadge.textContent = 'Paid'; txnBadge.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-700'; }
+                    if (txnSpinner) txnSpinner.classList.add('hidden');
+                    if (txnRefEl) txnRefEl.textContent = ref;
+
                     const bookingRef = result.booking_reference || ('BK-' + Date.now());
                     document.getElementById('b-booking-ref').textContent = bookingRef;
                     document.getElementById('b-confirm-name').textContent = `${bookingData.firstname} ${bookingData.lastname}`.trim();
@@ -824,7 +915,29 @@
                     document.getElementById('b-confirm-checkout').textContent = bookingData.checkout.toLocaleString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
                     document.getElementById('b-confirm-guests').textContent = document.getElementById('b-display-guests').textContent;
                     document.getElementById('b-confirm-total').textContent = document.getElementById('b-display-total').textContent;
+                    const confirmPayMethod = document.getElementById('b-confirm-payment-method');
+                    const confirmPayStatus = document.getElementById('b-confirm-payment-status');
+                    const confirmTxnRef = document.getElementById('b-confirm-txn-ref');
+                    if (confirmPayMethod) confirmPayMethod.textContent = (paymentMethod.value || '-').toUpperCase();
+                    if (confirmPayStatus) confirmPayStatus.textContent = 'Paid';
+                    if (confirmTxnRef) confirmTxnRef.textContent = ref;
                     showToast('Booking confirmed successfully! Reference: ' + bookingRef, 'success');
+
+                    // Persist minimal booking/transaction for banner after refresh
+                    try {
+                        const stored = {
+                            ref,
+                            bookingRef,
+                            method: (paymentMethod.value || '-').toUpperCase(),
+                            status: 'Paid',
+                            total: document.getElementById('b-display-total').textContent,
+                            ts: Date.now(),
+                            facilityId: {{ (int) $facility->id }},
+                            roomId: roomData.roomId || null
+                        };
+                        localStorage.setItem('lastBookingTxn', JSON.stringify(stored));
+                    } catch (_) {}
+
                     goToBookingStep(5);
                 } else {
                     let errorMessage = result.message || 'Booking failed. Please try again.';
@@ -833,15 +946,56 @@
                         errorMessage = errors.join(', ');
                     }
                     showToast(errorMessage, 'error');
+                    if (txnBadge) { txnBadge.textContent = 'Failed'; txnBadge.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-red-100 text-red-700'; }
+                    if (txnSpinner) txnSpinner.classList.add('hidden');
                     btn.disabled = false; if (btnText) btnText.classList.remove('hidden'); if (btnLoading) { btnLoading.classList.add('hidden'); btnLoading.classList.remove('flex'); }
                 }
             } catch (error) {
                 console.error('Network error:', error);
                 showToast('Network error. Please check your connection and try again.', 'error');
+                if (txnBadge) { txnBadge.textContent = 'Network Error'; txnBadge.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-red-100 text-red-700'; }
+                if (txnSpinner) txnSpinner.classList.add('hidden');
                 btn.disabled = false; if (btnText) btnText.classList.remove('hidden'); if (btnLoading) { btnLoading.classList.add('hidden'); btnLoading.classList.remove('flex'); }
             }
         });
     });
+
+    // Transaction banner restore on load
+    (function restoreTxnBanner(){
+        try {
+            const raw = localStorage.getItem('lastBookingTxn');
+            if (!raw) return;
+            const data = JSON.parse(raw);
+            if (!data || !data.ref) return;
+            const banner = document.getElementById('transaction-banner');
+            const s = document.getElementById('txn-banner-status');
+            const r = document.getElementById('txn-banner-ref');
+            const m = document.getElementById('txn-banner-method');
+            const t = document.getElementById('txn-banner-total');
+            if (banner && s && r && m && t) {
+                s.textContent = data.status || '-';
+                r.textContent = data.ref;
+                m.textContent = data.method || '-';
+                t.textContent = data.total || '-';
+                banner.classList.remove('hidden');
+            }
+        } catch (_) {}
+    })();
+
+    // Helpers to manage stored booking
+    function viewStoredBooking(){
+        try {
+            const raw = localStorage.getItem('lastBookingTxn');
+            if (!raw) return;
+            const data = JSON.parse(raw);
+            showToast(`Last transaction ${data.status || ''}: ${data.ref}`, 'success');
+        } catch (_) {}
+    }
+    function clearStoredBooking(){
+        try { localStorage.removeItem('lastBookingTxn'); } catch (_) {}
+        const banner = document.getElementById('transaction-banner');
+        if (banner) banner.classList.add('hidden');
+    }
 
     // Close modals when clicking outside
     const bookingModalEl = document.getElementById('bookingModal');
