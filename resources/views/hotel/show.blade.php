@@ -5,6 +5,7 @@
 
 <!-- Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&family=Inter:wght@400;700&family=Signika+SC&family=Sedan+SC&family=Spinnaker&family=Sora&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" referrerpolicy="no-referrer" />
 
 <style>
     /* Smooth, accessible modal visuals */
@@ -35,6 +36,12 @@
 
     .category-tab { transition: all 0.2s ease; cursor: pointer; }
     .category-tab.active { background: linear-gradient(135deg, #F97316, #FB923C); color: white; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(249, 115, 22, 0.35); }
+
+    /* New rooms navbar styles */
+    .match-orange { background: linear-gradient(135deg, #FFF7ED, #FFE8D3); border: 2px solid #FDBA74; }
+    .category-btn { background: #fff; color: #374151; border: 2px solid #E5E7EB; transition: all 0.2s ease; }
+    .category-btn:hover { border-color: #F97316; box-shadow: 0 6px 14px rgba(249, 115, 22, 0.18); transform: translateY(-2px); }
+    .category-btn.active { background: linear-gradient(135deg, #F97316, #FB923C); color: #fff; border-color: transparent; box-shadow: 0 8px 18px rgba(249, 115, 22, 0.35); }
 
     .alert-toast { position: fixed; top: 20px; right: 20px; z-index: 9999; min-width: 300px; animation: slideInRight 0.25s ease; }
     @keyframes slideInRight { from { transform: translateX(400px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
@@ -129,12 +136,28 @@
             <div class="max-w-5xl mx-auto">
                 <h2 class="text-xl sm:text-2xl md:text-3xl font-bold mb-6 text-gray-800">Our Rooms</h2>
 
-                <!-- Category Tabs -->
-                <div class="flex flex-wrap gap-3 mb-8 bg-gray-100 p-4 rounded-2xl">
-                    <button type="button" onclick="filterRooms('all')" class="category-tab active px-6 py-3 rounded-xl font-bold text-sm transition-all">All Rooms</button>
-                    @php $categories = $facility->rooms->pluck('category')->unique()->filter(); @endphp
+                <!-- Rooms Navbar -->
+                @php
+                    $categories = $facility->rooms->pluck('category')->filter()->unique()->values();
+                    $roomCategoryIcons = [
+                        'VIP' => 'fa-crown',
+                        'Deluxe' => 'fa-gem',
+                        'Suite' => 'fa-hotel',
+                        'Executive' => 'fa-briefcase',
+                        'Standard' => 'fa-bed',
+                        'Economy' => 'fa-tags',
+                    ];
+                @endphp
+
+                <div class="match-orange rounded-xl p-4 mb-8 flex flex-wrap justify-center gap-3 shadow-lg">
+                    <button type="button" onclick="filterRooms('all')" class="category-btn active px-6 py-3 rounded-lg font-bold text-lg flex items-center gap-2 relative z-10">
+                        <i class="fas fa-th-large text-white/90"></i> All Rooms
+                    </button>
                     @foreach($categories as $category)
-                        <button type="button" onclick="filterRooms('{{ $category }}')" class="category-tab px-6 py-3 rounded-xl font-bold text-sm bg-white text-gray-700 hover:bg-orange-100 transition-all">{{ $category }}</button>
+                        @php $icon = $roomCategoryIcons[$category] ?? 'fa-bed'; @endphp
+                        <button type="button" onclick="filterRooms('{{ $category }}')" class="category-btn px-6 py-3 rounded-lg font-bold text-lg flex items-center gap-2 relative z-10">
+                            <i class="fas {{ $icon }} {{ strtolower($category) === 'vip' ? 'text-yellow-300' : 'text-orange-100' }}"></i> {{ $category }}
+                        </button>
                     @endforeach
                 </div>
 
@@ -558,12 +581,12 @@
     // Room Category Filter
     function filterRooms(category) {
         const rooms = document.querySelectorAll('.room-card');
-        const tabs = document.querySelectorAll('.category-tab');
-        tabs.forEach(tab => {
-            tab.classList.remove('active');
-            if (tab.textContent.trim() === category || (category === 'all' && tab.textContent.includes('All'))) {
-                tab.classList.add('active');
-            }
+        const tabs = document.querySelectorAll('.category-btn');
+        tabs.forEach(btn => {
+            btn.classList.remove('active');
+            const isAll = category === 'all' && btn.textContent.trim().toLowerCase().includes('all rooms');
+            const isMatch = btn.textContent.trim() === category;
+            if (isAll || isMatch) btn.classList.add('active');
         });
         rooms.forEach(room => {
             if (category === 'all' || room.dataset.category === category) {
