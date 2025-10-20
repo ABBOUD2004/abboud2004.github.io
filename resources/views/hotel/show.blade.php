@@ -50,6 +50,23 @@
 <div class="bg-gradient-to-b from-gray-100 to-gray-200 min-h-screen font-[Inter] text-black">
     <div class="w-full bg-white min-h-screen">
 
+        <!-- Transaction Banner (persists across refresh via localStorage) -->
+        <div id="transaction-banner" class="hidden bg-gradient-to-r from-amber-50 to-orange-50 border-l-4 border-orange-500 p-4 mx-4 sm:mx-6 lg:mx-8 mt-4 rounded-xl shadow-sm">
+            <div class="flex items-start justify-between gap-3">
+                <div class="flex items-center gap-3">
+                    <i class="fas fa-receipt text-orange-600" aria-hidden="true"></i>
+                    <div>
+                        <p class="text-sm text-gray-700">Last transaction <span id="txn-banner-status" class="font-semibold text-gray-900">-</span></p>
+                        <p class="text-xs text-gray-600">Ref: <span id="txn-banner-ref" class="font-mono">-</span> • <span id="txn-banner-method">-</span> • <span id="txn-banner-total">-</span></p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button type="button" onclick="viewStoredBooking()" class="text-sm font-semibold text-orange-600 hover:underline">View details</button>
+                    <button type="button" onclick="clearStoredBooking()" class="text-sm text-gray-500 hover:text-gray-700" aria-label="Dismiss">✕</button>
+                </div>
+            </div>
+        </div>
+
         <!-- Hero Image -->
         <section class="relative w-full px-4 sm:px-6 lg:px-8 pt-6">
             <div class="relative h-[280px] sm:h-[350px] md:h-[420px] lg:h-[480px] overflow-hidden rounded-3xl border-8 border-orange-100">
@@ -905,6 +922,22 @@
                     if (confirmPayStatus) confirmPayStatus.textContent = 'Paid';
                     if (confirmTxnRef) confirmTxnRef.textContent = ref;
                     showToast('Booking confirmed successfully! Reference: ' + bookingRef, 'success');
+
+                    // Persist minimal booking/transaction for banner after refresh
+                    try {
+                        const stored = {
+                            ref,
+                            bookingRef,
+                            method: (paymentMethod.value || '-').toUpperCase(),
+                            status: 'Paid',
+                            total: document.getElementById('b-display-total').textContent,
+                            ts: Date.now(),
+                            facilityId: {{ (int) $facility->id }},
+                            roomId: roomData.roomId || null
+                        };
+                        localStorage.setItem('lastBookingTxn', JSON.stringify(stored));
+                    } catch (_) {}
+
                     goToBookingStep(5);
                 } else {
                     let errorMessage = result.message || 'Booking failed. Please try again.';
@@ -926,6 +959,43 @@
             }
         });
     });
+
+    // Transaction banner restore on load
+    (function restoreTxnBanner(){
+        try {
+            const raw = localStorage.getItem('lastBookingTxn');
+            if (!raw) return;
+            const data = JSON.parse(raw);
+            if (!data || !data.ref) return;
+            const banner = document.getElementById('transaction-banner');
+            const s = document.getElementById('txn-banner-status');
+            const r = document.getElementById('txn-banner-ref');
+            const m = document.getElementById('txn-banner-method');
+            const t = document.getElementById('txn-banner-total');
+            if (banner && s && r && m && t) {
+                s.textContent = data.status || '-';
+                r.textContent = data.ref;
+                m.textContent = data.method || '-';
+                t.textContent = data.total || '-';
+                banner.classList.remove('hidden');
+            }
+        } catch (_) {}
+    })();
+
+    // Helpers to manage stored booking
+    function viewStoredBooking(){
+        try {
+            const raw = localStorage.getItem('lastBookingTxn');
+            if (!raw) return;
+            const data = JSON.parse(raw);
+            showToast(`Last transaction ${data.status || ''}: ${data.ref}`, 'success');
+        } catch (_) {}
+    }
+    function clearStoredBooking(){
+        try { localStorage.removeItem('lastBookingTxn'); } catch (_) {}
+        const banner = document.getElementById('transaction-banner');
+        if (banner) banner.classList.add('hidden');
+    }
 
     // Close modals when clicking outside
     const bookingModalEl = document.getElementById('bookingModal');
