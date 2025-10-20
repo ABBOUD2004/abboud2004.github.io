@@ -448,6 +448,21 @@
                         <p class="text-sm text-gray-600">💰 Total Amount: <span class="font-semibold" id="b-payment-total">-</span></p>
                     </div>
 
+                    <!-- Transaction panel (appears during/after processing) -->
+                    <div id="b-transaction-panel" class="mt-6 bg-white border-2 border-gray-200 rounded-lg p-4 hidden">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <span id="b-txn-status-badge" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-700">Processing</span>
+                                <span class="text-sm text-gray-600">Payment method: <span id="b-txn-provider" class="font-semibold">-</span></span>
+                            </div>
+                            <div class="flex items-center gap-2" id="b-txn-spinner">
+                                <span class="loading-spinner"></span>
+                                <span class="text-sm text-gray-600">Awaiting confirmation...</span>
+                            </div>
+                        </div>
+                        <div class="mt-3 text-sm text-gray-600">Transaction Ref: <span id="b-txn-ref" class="font-semibold">-</span></div>
+                    </div>
+
                     <button type="submit" id="confirm-booking-btn" class="mt-8 w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white py-4 rounded-xl font-bold text-lg hover:from-orange-600 hover:to-orange-700 transition-all transform hover:scale-105 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed" data-prevent-double-click>
                         <span id="btn-text">Confirm Booking</span>
                         <span id="btn-loading" class="hidden items-center justify-center gap-2"><span class="loading-spinner"></span> Processing...</span>
@@ -477,6 +492,9 @@
                                 <div class="flex justify-between"><span class="text-gray-600">Check-in:</span><span class="font-semibold" id="b-confirm-checkin">-</span></div>
                                 <div class="flex justify-between"><span class="text-gray-600">Checkout:</span><span class="font-semibold" id="b-confirm-checkout">-</span></div>
                                 <div class="flex justify-between"><span class="text-gray-600">Guests:</span><span class="font-semibold" id="b-confirm-guests">-</span></div>
+                                <div class="flex justify-between"><span class="text-gray-600">Payment Method:</span><span class="font-semibold" id="b-confirm-payment-method">-</span></div>
+                                <div class="flex justify-between"><span class="text-gray-600">Payment Status:</span><span class="font-semibold" id="b-confirm-payment-status">-</span></div>
+                                <div class="flex justify-between"><span class="text-gray-600">Transaction Ref:</span><span class="font-semibold" id="b-confirm-txn-ref">-</span></div>
                                 <div class="flex justify-between pt-3 border-t-2 border-gray-300"><span class="text-gray-800 font-bold">Total Paid:</span><span class="font-bold text-orange-600" id="b-confirm-total">-</span></div>
                             </div>
                         </div>
@@ -750,6 +768,9 @@
             mtnInput.required = isMtn;
             if (!isMtn) mtnInput.value = '';
         }
+        // Reflect provider in transaction panel (if shown)
+        const providerEl = document.getElementById('b-txn-provider');
+        if (providerEl) providerEl.textContent = method.toUpperCase();
     }
 
     // Form Submission (AJAX)
@@ -804,6 +825,18 @@
                 nights: parseInt(formData.get('nights'))
             };
 
+            // Show transaction panel as soon as we start
+            const txnPanel = document.getElementById('b-transaction-panel');
+            const txnBadge = document.getElementById('b-txn-status-badge');
+            const txnSpinner = document.getElementById('b-txn-spinner');
+            const txnProvider = document.getElementById('b-txn-provider');
+            const txnRefEl = document.getElementById('b-txn-ref');
+            if (txnPanel) txnPanel.classList.remove('hidden');
+            if (txnBadge) { txnBadge.textContent = 'Processing'; txnBadge.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-700'; }
+            if (txnSpinner) txnSpinner.classList.remove('hidden');
+            if (txnProvider) txnProvider.textContent = (paymentMethod.value || '-').toUpperCase();
+            if (txnRefEl) txnRefEl.textContent = '-';
+
             try {
                 const response = await fetch(BOOKINGS_STORE_URL, {
                     method: 'POST',
@@ -828,6 +861,12 @@
                 }
 
                 if (response.ok && result.success) {
+                    // Update transaction panel with success and reference
+                    const ref = result.transaction_reference || result.payment_reference || result.booking_reference || ('BK-' + Date.now());
+                    if (txnBadge) { txnBadge.textContent = 'Paid'; txnBadge.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-700'; }
+                    if (txnSpinner) txnSpinner.classList.add('hidden');
+                    if (txnRefEl) txnRefEl.textContent = ref;
+
                     const bookingRef = result.booking_reference || ('BK-' + Date.now());
                     document.getElementById('b-booking-ref').textContent = bookingRef;
                     document.getElementById('b-confirm-name').textContent = `${bookingData.firstname} ${bookingData.lastname}`.trim();
@@ -836,6 +875,12 @@
                     document.getElementById('b-confirm-checkout').textContent = bookingData.checkout.toLocaleString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
                     document.getElementById('b-confirm-guests').textContent = document.getElementById('b-display-guests').textContent;
                     document.getElementById('b-confirm-total').textContent = document.getElementById('b-display-total').textContent;
+                    const confirmPayMethod = document.getElementById('b-confirm-payment-method');
+                    const confirmPayStatus = document.getElementById('b-confirm-payment-status');
+                    const confirmTxnRef = document.getElementById('b-confirm-txn-ref');
+                    if (confirmPayMethod) confirmPayMethod.textContent = (paymentMethod.value || '-').toUpperCase();
+                    if (confirmPayStatus) confirmPayStatus.textContent = 'Paid';
+                    if (confirmTxnRef) confirmTxnRef.textContent = ref;
                     showToast('Booking confirmed successfully! Reference: ' + bookingRef, 'success');
                     goToBookingStep(5);
                 } else {
@@ -845,11 +890,15 @@
                         errorMessage = errors.join(', ');
                     }
                     showToast(errorMessage, 'error');
+                    if (txnBadge) { txnBadge.textContent = 'Failed'; txnBadge.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-red-100 text-red-700'; }
+                    if (txnSpinner) txnSpinner.classList.add('hidden');
                     btn.disabled = false; if (btnText) btnText.classList.remove('hidden'); if (btnLoading) { btnLoading.classList.add('hidden'); btnLoading.classList.remove('flex'); }
                 }
             } catch (error) {
                 console.error('Network error:', error);
                 showToast('Network error. Please check your connection and try again.', 'error');
+                if (txnBadge) { txnBadge.textContent = 'Network Error'; txnBadge.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-red-100 text-red-700'; }
+                if (txnSpinner) txnSpinner.classList.add('hidden');
                 btn.disabled = false; if (btnText) btnText.classList.remove('hidden'); if (btnLoading) { btnLoading.classList.add('hidden'); btnLoading.classList.remove('flex'); }
             }
         });
